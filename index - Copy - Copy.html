@@ -39,9 +39,13 @@
         .form-group { flex: 1; min-width: 220px; }
         label { display: block; margin-bottom: 8px; font-weight: bold; color: #34495e; font-size: 15px; }
         
-        input[type="number"], input[type="month"], select { width: 100%; padding: 12px; border: 1px solid #bdc3c7; border-radius: 5px; box-sizing: border-box; font-size: 16px; font-family: inherit; transition: border-color 0.3s; }
-        input[type="number"]:focus, input[type="month"]:focus, select:focus { border-color: #3498db; outline: none; }
+        input[type="number"], select { width: 100%; padding: 12px; border: 1px solid #bdc3c7; border-radius: 5px; box-sizing: border-box; font-size: 16px; font-family: inherit; transition: border-color 0.3s; }
+        input[type="number"]:focus, select:focus { border-color: #3498db; outline: none; }
         
+        /* تنسيق القوائم المزدوجة للتواريخ */
+        .date-selectors { display: flex; gap: 10px; }
+        .date-selectors select { flex: 1; cursor: pointer; }
+
         .optional-note { font-size: 12px; color: #7f8c8d; display: block; margin-top: 6px; font-weight: normal; }
 
         .calc-btn { width: 100%; padding: 15px; background-color: #2c3e50; color: white; border: none; border-radius: 5px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: background-color 0.3s ease; }
@@ -67,17 +71,24 @@
         .lump-sum-amount { font-size: 26px; font-weight: bold; color: #e67e22; margin: 10px 0; }
         .lump-sum-details { font-size: 14px; color: #7f8c8d; margin-top: 10px; line-height: 1.5; }
 
+        /* تذييل الصفحة وتنسيق الأيقونات */
         .copyright-footer {
-            margin-top: 30px; margin-bottom: 10px; text-align: center;
+            margin-top: 30px; margin-bottom: 20px; text-align: center;
             font-size: 14px; color: #7f8c8d; font-weight: bold;
             width: 100%; max-width: 850px;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
         }
+        .copyright-footer p { margin: 0; }
+        .social-links { display: flex; gap: 18px; margin-top: 5px; }
+        .social-links a { color: #7f8c8d; font-size: 24px; transition: color 0.3s ease, transform 0.2s ease; }
+        .social-links a:hover { color: #2c3e50; transform: translateY(-3px); }
 
         @media (max-width: 768px) { .comparison-grid { grid-template-columns: 1fr; } .calculator-section { padding: 20px; } }
         @media print {
             body { background-color: #fff; padding: 0; display: block; }
             .calculator-section { box-shadow: none; padding: 0; max-width: 100%; margin-top: 0; }
             .disclaimer-box, .form-row, .calc-btn, .print-btn, .copyright-footer { display: none !important; }
+            .social-links { display: none !important; }
             .result-section { display: block !important; }
             .law-column, .lump-sum-box { page-break-inside: avoid; border: 1px solid #ccc; }
         }
@@ -97,12 +108,26 @@
 
         <div class="form-row">
             <div class="form-group">
-                <label for="birthDate">تاريخ الميلاد (الشهر والسنة):</label>
-                <input type="month" id="birthDate" required>
+                <label>تاريخ الميلاد (الشهر والسنة):</label>
+                <div class="date-selectors">
+                    <select id="birthMonth">
+                        <option value="" disabled selected>الشهر</option>
+                    </select>
+                    <select id="birthYear">
+                        <option value="" disabled selected>السنة</option>
+                    </select>
+                </div>
             </div>
             <div class="form-group">
-                <label for="appointmentDate">تاريخ التعيين للاشتراك المتصل:</label>
-                <input type="month" id="appointmentDate">
+                <label>تاريخ التعيين للاشتراك المتصل:</label>
+                <div class="date-selectors">
+                    <select id="appointmentMonth">
+                        <option value="">الشهر</option>
+                    </select>
+                    <select id="appointmentYear">
+                        <option value="">السنة</option>
+                    </select>
+                </div>
                 <span class="optional-note">(اختياري: اتركه فارغاً للقطاع الخاص المتقطع)</span>
             </div>
         </div>
@@ -162,59 +187,134 @@
     </main>
 
     <div class="copyright-footer">
-        &copy; 2026 جميع الحقوق محفوظة - تم التطوير والبرمجة بواسطة نورالدين السوالمه
+        <p>&copy; 2026 جميع الحقوق محفوظة - تم التطوير والبرمجة بواسطة نورالدين السوالمه</p>
+        <div class="social-links">
+            <a href="https://www.linkedin.com/in/nour-eddin-alsawalmeh-91801255/" target="_blank" title="تواصل معي على لينكد إن"><i class="fa-brands fa-linkedin"></i></a>
+            <a href="https://github.com/NourEnzi" target="_blank" title="حسابي ومشاريعي على جيت هب"><i class="fa-brands fa-github"></i></a>
+            <a href="mailto:NOUR.AL3NEZI@HOTMAIL.COM" title="راسلني عبر البريد الإلكتروني"><i class="fa-solid fa-envelope"></i></a>
+        </div>
     </div>
 
 <script>
+    // [توليد التواريخ ديناميكياً بناءً على السنة الحالية]
+    document.addEventListener("DOMContentLoaded", function() {
+        const currentYear = new Date().getFullYear(); 
+        
+        const bMonth = document.getElementById("birthMonth");
+        const aMonth = document.getElementById("appointmentMonth");
+        for (let m = 1; m <= 12; m++) {
+            bMonth.add(new Option(m, m));
+            aMonth.add(new Option(m, m));
+        }
+
+        const bYearSelect = document.getElementById("birthYear");
+        const maxBirthYear = currentYear - 15;
+        for (let y = maxBirthYear; y >= 1950; y--) {
+            bYearSelect.add(new Option(y, y));
+        }
+
+        const aYearSelect = document.getElementById("appointmentYear");
+        const minAppYear = currentYear - 70;
+        for (let y = currentYear; y >= minAppYear; y--) {
+            aYearSelect.add(new Option(y, y));
+        }
+    });
+
     // [طبقة الحماية]
     document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
     document.onkeydown = function(e) {
-        if(e.keyCode == 123) return false; // F12
-        if(e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) return false; // Ctrl+Shift+I/J/C
-        if(e.ctrlKey && e.keyCode == 85) return false; // Ctrl+U
+        if(e.keyCode == 123) return false; 
+        if(e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) return false; 
+        if(e.ctrlKey && e.keyCode == 85) return false; 
     };
 
-    // [الخوارزمية المزدوجة التي طلبتها]
-    function getYM(d,t){if(!d||!t)return null;let a=new Date(d),y=a.getFullYear(),m=a.getMonth();return{y:t<=100?y+t:t,m:m}}
-    
+    // [الخوارزمية المزدوجة المحدثة للعمل مع القوائم المنسدلة]
     function autoF(){
-        let d=document.getElementById("birthDate").value;
-        let a=document.getElementById("appointmentDate").value;
-        let t=parseInt(document.getElementById("targetInput").value);
-        let c=document.getElementById("expectedCont");
+        let bYear = document.getElementById("birthYear").value;
+        let bMonth = document.getElementById("birthMonth").value;
+        let aYear = document.getElementById("appointmentYear").value;
+        let aMonth = document.getElementById("appointmentMonth").value;
+        let tInput = parseInt(document.getElementById("targetInput").value);
+        let c = document.getElementById("expectedCont");
         
-        if(d && t){
-            let p = getYM(d,t);
-            let b = new Date(d);
-            let y = b.getFullYear();
+        if(bYear && bMonth && tInput){
+            let y = parseInt(bYear);
+            let targetYear = tInput <= 100 ? y + tInput : tInput; 
             
-            if(a){
-                // إدخال التعيين: حساب دقيق بالأشهر وإقفال الخانة
-                let ad=new Date(a), ay=ad.getFullYear(), am=ad.getMonth();
-                let m=(p.y-ay)*12+(p.m-am);
-                c.value=m>0?m:0;
-                c.readOnly=true;
-                c.style.backgroundColor="#e9ecef";
+            if(aYear && aMonth){
+                let appY = parseInt(aYear);
+                let appM = parseInt(aMonth);
+                let bM = parseInt(bMonth);
+                let months = (targetYear - appY) * 12 + (bM - appM);
+                c.value = months > 0 ? months : 0;
+                c.readOnly = true;
+                c.style.backgroundColor = "#e9ecef";
             } else {
-                // لم يتم إدخال التعيين (أو تم مسحه): حساب من عمر 22 وترك الخانة مفتوحة للتعديل
-                let ageAtTarget = p.y - y;
+                let ageAtTarget = targetYear - y;
                 let yearsOfWork = ageAtTarget - 22;
                 c.value = yearsOfWork > 0 ? yearsOfWork * 12 : 0;
                 c.readOnly = false;
                 c.style.backgroundColor = "";
             }
         } else {
-            // تفريغ الحقول يعيد الخانة لوضعها الطبيعي
             c.readOnly = false;
             c.style.backgroundColor = "";
         }
     }
     
-    document.getElementById("birthDate").addEventListener("input",autoF);
-    document.getElementById("appointmentDate").addEventListener("input",autoF);
+    document.getElementById("birthMonth").addEventListener("change",autoF);
+    document.getElementById("birthYear").addEventListener("change",autoF);
+    document.getElementById("appointmentMonth").addEventListener("change",autoF);
+    document.getElementById("appointmentYear").addEventListener("change",autoF);
     document.getElementById("targetInput").addEventListener("input",autoF);
 
-    function calculateAll(){let g=document.getElementById("gender").value,d=document.getElementById("birthDate").value,t=parseInt(document.getElementById("targetInput").value),c=parseInt(document.getElementById("expectedCont").value),s=parseFloat(document.getElementById("avgSalary").value)||0;if(!d||!t||isNaN(c))return void alert("يرجى تعبئة الحقول الأساسية لاستخراج التقرير.");let a=new Date(d),y=a.getFullYear(),p=getYM(d,t),l=p.y,m=l-y;if(l<=y||m<=0)return void alert("بيانات غير منطقية: تأكد من التواريخ.");let u="male"===g?252:228,r=180,b="male"===g?60:55,o=u,i=r,n=b;if(l>=2030){let f=l-2030+1;o=u+6*f,"male"===g&&o>360?o=360:"female"===g&&o>300&&(o=300),(i=r+6*f)>240&&(i=240);let h="male"===g?65:60;(n=b+.5*f)>h&&(n=h)}let v=s*c*.2175,w=1,B="";c<120?(w=1.1,B="10%"):c>=120&&c<216?(w=1.12,B="12%"):c>=216&&(w=1.15,B="15%");let E=(v*w).toFixed(2);function x(e,t,n,r,a=!1){let l="";return t?(l="✅ <strong>"+e+": مستوفى الشروط</strong><br>تم استيفاء شرط العمر ("+n+") ورصيد الاشتراكات ("+r+").",a&&(l+="<span class='discount-note'>⚠️ ملاحظة قانونية: يخضع راتب التقاعد المبكر لنسبة تخفيض (خصم) مقدارها 2% عن كل 6 أشهر تسبق سن التقاعد الوجوبي.</span>")):(l="❌ <strong>"+e+": غير مستوفى الشروط</strong><br>الحد الأدنى المطلوب: عمر "+n+" واشتراكات "+r+"."),l}document.getElementById("resYear").innerText=l,document.getElementById("resAge").innerText=m,document.getElementById("resCont").innerText=c,document.getElementById("oldEarlyBox").className="status-box "+(m>=50&&c>=u?"success":"fail"),document.getElementById("oldEarlyBox").innerHTML=x("التقاعد المبكر",m>=50&&c>=u,50,u),document.getElementById("oldMandatoryBox").className="status-box "+(m>=b&&c>=r?"success":"fail"),document.getElementById("oldMandatoryBox").innerHTML=x("تقاعد الشيخوخة الوجوبي",m>=b&&c>=r,b,r),document.getElementById("newEarlyBox").className="status-box "+(m>=50&&c>=o?"success":"fail"),document.getElementById("newEarlyBox").innerHTML=x("التقاعد المبكر",m>=50&&c>=o,50,o,m>=50&&c>=o),document.getElementById("newMandatoryBox").className="status-box "+(m>=n&&c>=i?"success":"fail"),document.getElementById("newMandatoryBox").innerHTML=x("تقاعد الشيخوخة الوجوبي",m>=n&&c>=i,n,i),s>0&&c>0?(document.getElementById("lumpSumResult").innerText=E+" دينار أردني",document.getElementById("lumpSumDetails").innerText="* تم الحساب التقديري بناءً على متوسط الراتب ("+s+")، واشتراكات ("+c+" شهراً)، بإضافة زيادة قانونية نسبتها "+B+" وفقاً لمسودة التعديلات."):(document.getElementById("lumpSumResult").innerText="يرجى إدخال متوسط الراتب لحساب التكلفة التقديرية",document.getElementById("lumpSumDetails").innerText=""),document.getElementById("resultBox").style.display="block"}
+    function calculateAll(){
+        let g=document.getElementById("gender").value;
+        let bYear=document.getElementById("birthYear").value;
+        let tInput=parseInt(document.getElementById("targetInput").value);
+        let c=parseInt(document.getElementById("expectedCont").value);
+        let s=parseFloat(document.getElementById("avgSalary").value)||0;
+        
+        if(!bYear || !tInput || isNaN(c) || s < 0) return void alert("عذراً، يرجى تعبئة الحقول الأساسية وتجنب القيم السالبة في الراتب.");
+        
+        let y=parseInt(bYear);
+        let l = tInput <= 120 ? y + tInput : tInput;
+        let m = l - y;
+        
+        let appY_val = document.getElementById("appointmentYear").value;
+        if(l<=y || m<=0 || m>120 || (tInput>120 && tInput<2024) || (appY_val && (l < parseInt(appY_val) || parseInt(appY_val) - y < 16))) return void alert("بيانات غير قانونية أو غير منطقية: يرجى التحقق من التواريخ (يجب ألا يقل العمر عند التعيين عن 16 عاماً، والتأكد من منطقية العمر المستهدف).");
+
+        let u="male"===g?252:228,r=180,b="male"===g?60:55,o=u,i=r,n=b;
+        if(l>=2030){
+            let f=l-2030+1;o=u+6*f,"male"===g&&o>360?o=360:"female"===g&&o>300&&(o=300),(i=r+6*f)>240&&(i=240);
+            let h="male"===g?65:60;(n=b+.5*f)>h&&(n=h)
+        }
+        
+        let v=s*c*.2175,w=1,B="";
+        c<120?(w=1.1,B="10%"):c>=120&&c<216?(w=1.12,B="12%"):c>=216&&(w=1.15,B="15%");
+        let E=(v*w).toFixed(2);
+        
+        function x(e,t,n,r,a=!1){
+            let l="";
+            return t?(l="✅ <strong>"+e+": مستوفى الشروط</strong><br>تم استيفاء شرط العمر ("+n+") ورصيد الاشتراكات ("+r+").",a&&(l+="<span class='discount-note'>⚠️ ملاحظة قانونية: يخضع راتب التقاعد المبكر لنسبة تخفيض (خصم) مقدارها 2% عن كل 6 أشهر تسبق سن التقاعد الوجوبي.</span>")):(l="❌ <strong>"+e+": غير مستوفى الشروط</strong><br>الحد الأدنى المطلوب: عمر "+n+" واشتراكات "+r+"."),l
+        }
+        
+        document.getElementById("resYear").innerText=l;
+        document.getElementById("resAge").innerText=m;
+        document.getElementById("resCont").innerText=c;
+        document.getElementById("oldEarlyBox").className="status-box "+(m>=50&&c>=u?"success":"fail");
+        document.getElementById("oldEarlyBox").innerHTML=x("التقاعد المبكر",m>=50&&c>=u,50,u);
+        document.getElementById("oldMandatoryBox").className="status-box "+(m>=b&&c>=r?"success":"fail");
+        document.getElementById("oldMandatoryBox").innerHTML=x("تقاعد الشيخوخة الوجوبي",m>=b&&c>=r,b,r);
+        document.getElementById("newEarlyBox").className="status-box "+(m>=50&&c>=o?"success":"fail");
+        document.getElementById("newEarlyBox").innerHTML=x("التقاعد المبكر",m>=50&&c>=o,50,o,m>=50&&c>=o);
+        document.getElementById("newMandatoryBox").className="status-box "+(m>=n&&c>=i?"success":"fail");
+        document.getElementById("newMandatoryBox").innerHTML=x("تقاعد الشيخوخة الوجوبي",m>=n&&c>=i,n,i);
+        
+        s>0&&c>0?(document.getElementById("lumpSumResult").innerText=E+" دينار أردني",document.getElementById("lumpSumDetails").innerText="* تم الحساب التقديري بناءً على متوسط الراتب ("+s+")، واشتراكات ("+c+" شهراً)، بإضافة زيادة قانونية نسبتها "+B+" وفقاً لمسودة التعديلات."):(document.getElementById("lumpSumResult").innerText="يرجى إدخال متوسط الراتب لحساب التكلفة التقديرية",document.getElementById("lumpSumDetails").innerText="");
+        
+        document.getElementById("resultBox").style.display="block"
+    }
 </script>
 </body>
 </html>
