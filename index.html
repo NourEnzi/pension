@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+    <title>حاسبة التقاعد التجريبية - الضمان الاجتماعي الأردني</title>
+    <meta name="description" content="استخدم حاسبة التقاعد المجانية لمعرفة شروط التقاعد المبكر وتقاعد الشيخوخة، ومقارنة وضعك بين قانون الضمان الساري لعام 2014 ومسودة التعديلات المقترحة، وحساب تعويض الدفعة الواحدة.">
+    <meta name="keywords" content="حاسبة التقاعد, التقاعد المبكر, تقاعد الشيخوخة, تعديلات الضمان الاجتماعي, قانون الضمان الأردني, تعويض الدفعة الواحدة, حسبة التقاعد, مسودة الضمان">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:title" content="حاسبة التقاعد التجريبية - الضمان الاجتماعي الأردني">
+    <meta property="og:description" content="أداة سريعة ومجانية لمحاكاة شروط التقاعد ومقارنتها مع مسودة التعديلات المقترحة. جربها الآن.">
+    <meta property="og:type" content="website">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-HYLW3T6M72"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -11,7 +19,6 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حاسبة التقاعد التجريبية - الضمان الاجتماعي الأردني</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* المتغيرات الأساسية (الوضع النهاري) */
@@ -39,7 +46,6 @@
             --lumpsum-bg: #fef9e7;
             --lumpsum-border: #f1c40f;
             --lumpsum-text: #d35400;
---text-muted: #7f8c8d; /* للوضع النهاري */
         }
 
         /* المتغيرات (الوضع الليلي) */
@@ -47,7 +53,7 @@
             --bg-main: #121212;
             --calc-bg: #1e1e1e;
             --text-main: #e0e0e0;
-            --text-muted: #a0a0a0;
+            --text-muted: #bdc3c7;
             --border-col: #444;
             --title-color: #f1f1f1;
             --input-bg: #2c2c2c;
@@ -67,7 +73,6 @@
             --lumpsum-bg: #332a10;
             --lumpsum-border: #f39c12;
             --lumpsum-text: #f39c12;
---text-muted: #bdc3c7; /* للوضع الليلي */
         }
 
         body {
@@ -121,9 +126,13 @@
 
         .calc-btn { width: 100%; padding: 15px; background-color: var(--btn-bg); color: white; border: none; border-radius: 5px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: background-color 0.3s ease; }
         .calc-btn:hover { background-color: var(--btn-hover); }
-        .print-btn { background-color: #27ae60; margin-top: 20px; width: 100%; padding: 15px; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease; }
-        .print-btn:hover { background-color: #2ecc71; }
+        .print-btn { background-color: #2c3e50; margin-top: 20px; width: 100%; padding: 15px; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease; }
+        .print-btn:hover { background-color: #34495e; }
         
+        /* تصميم زر الواتساب لمشاركة النتائج */
+        .share-wa-btn { background-color: #25d366; margin-top: 15px; width: 100%; padding: 15px; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease; display: flex; justify-content: center; align-items: center; gap: 10px; text-decoration: none; box-sizing: border-box; }
+        .share-wa-btn:hover { background-color: #128c7e; color: white; }
+
         .result-section { margin-top: 30px; display: none; }
         .info-header { background-color: var(--info-header-bg); padding: 15px; border-radius: 5px; margin-bottom: 25px; border-right: 5px solid #3498db; font-size: 16px; transition: background-color 0.4s ease; }
         .info-header p { margin: 6px 0; }
@@ -154,11 +163,47 @@
         .social-links a { color: var(--text-muted); font-size: 24px; transition: color 0.3s ease, transform 0.2s ease; }
         .social-links a:hover { color: var(--title-color); transform: translateY(-3px); }
 
-        @media (max-width: 768px) { .comparison-grid { grid-template-columns: 1fr; } .calculator-section { padding: 20px; } }
+        /* تنسيقات قسم الأسئلة الشائعة (نظام الأكورديون) */
+        .faq-accordion { margin-top: 30px; width: 100%; max-width: 850px; text-align: right; }
+        .faq-accordion h2 { color: var(--title-color); border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-bottom: 20px; font-size: 22px; text-align: right; }
+        .accordion-item { border: 1px solid var(--border-col); border-radius: 8px; margin-bottom: 10px; overflow: hidden; background-color: var(--calc-bg); transition: background-color 0.4s ease, border-color 0.4s ease; }
+        .accordion-btn { width: 100%; text-align: right; padding: 18px 20px; font-size: 16px; font-weight: bold; color: var(--title-color); background: none; border: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background-color 0.3s ease, color 0.4s ease; font-family: inherit; outline: none; }
+        .accordion-btn:hover { background-color: var(--info-header-bg); }
+        .accordion-icon { transition: transform 0.3s ease; color: #3498db; }
+        .accordion-btn.active .accordion-icon { transform: rotate(180deg); }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background-color: var(--calc-bg); }
+        .accordion-content p { margin: 0; padding: 0 20px 20px 20px; color: var(--text-main); line-height: 1.7; font-size: 15px; }
+
+        /* تنسيقات زر الواتساب العائم الدائم */
+        .floating-wa-btn {
+            position: fixed;
+            bottom: 25px;
+            left: 25px; 
+            background-color: #25d366;
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 1000;
+            text-decoration: none;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .floating-wa-btn:hover {
+            transform: scale(1.1);
+            background-color: #128c7e;
+            color: white;
+        }
+
+        @media (max-width: 768px) { .comparison-grid { grid-template-columns: 1fr; } .calculator-section { padding: 20px; } .floating-wa-btn { bottom: 20px; left: 20px; width: 55px; height: 55px; font-size: 28px; } }
         @media print {
             body { background-color: #fff !important; color: #000 !important; padding: 0; display: block; }
             .calculator-section { box-shadow: none; padding: 0; max-width: 100%; margin-top: 0; background-color: #fff !important; }
-            .dark-mode-btn, .disclaimer-box, .form-row, .calc-btn, .print-btn, .copyright-footer { display: none !important; }
+            .dark-mode-btn, .disclaimer-box, .form-row, .calc-btn, .print-btn, .share-wa-btn, .copyright-footer, .faq-accordion, .floating-wa-btn { display: none !important; }
             .social-links { display: none !important; }
             .result-section { display: block !important; }
             .law-column, .lump-sum-box { page-break-inside: avoid; border: 1px solid #ccc; background-color: #fff !important; color: #000 !important;}
@@ -257,10 +302,55 @@
                 <p class="lump-sum-details" id="lumpSumDetails"></p>
             </div>
             
+            <a id="shareResultsBtn" class="share-wa-btn" href="#" target="_blank">
+                <i class="fa-brands fa-whatsapp" style="font-size: 20px;"></i>
+                شارك نتيجتك وحالتك التقاعدية عبر واتساب
+            </a>
+            
             <button class="print-btn" onclick="window.print()">🖨️ طباعة أو حفظ التقرير بصيغة PDF</button>
         </div>
     </main>
 
+    <div class="faq-accordion">
+        <h2>أسئلة شائعة وتفاصيل التعديلات المقترحة</h2>
+        
+        <div class="accordion-item">
+            <button class="accordion-btn">ما هو التغيير الذي سيحدث إذا طُبقت المسودة؟ <i class="fa-solid fa-chevron-down accordion-icon"></i></button>
+            <div class="accordion-content">
+                <p>تقترح مسودة التعديلات <strong>رفعاً تدريجياً لسن تقاعد الشيخوخة الوجوبي وعدد الاشتراكات المطلوبة</strong>، ويبدأ هذا التدرج اعتباراً من عام 2030. حيث سيزداد سن التقاعد الوجوبي بواقع 6 أشهر سنوياً (ليصل كحد أقصى إلى 65 للذكور و60 للإناث). كما سترتفع الاشتراكات المطلوبة للتقاعد المبكر والوجوبي بواقع 6 أشهر إضافية عن كل سنة تلي عام 2030 (بحد أقصى 360 اشتراكاً للمبكر للذكور و300 للإناث، و240 اشتراكاً للوجوبي للجنسين).</p>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <button class="accordion-btn">ما هي شروط التقاعد المبكر للذكور والإناث؟ <i class="fa-solid fa-chevron-down accordion-icon"></i></button>
+            <div class="accordion-content">
+                <p>تختلف الشروط حسب القانون وطبيعة العمل:<br>
+                <strong>في القانون الحالي (2014):</strong> للتقاعد المبكر العام، يُشترط بلوغ سن 50 عاماً مع 252 اشتراكاً للذكور، و228 للإناث. أما للمهن الخطرة (المبكر الخاص)، فيُشترط بلوغ 45 عاماً مع 300 اشتراك للذكور، و264 للإناث.<br>
+                <strong>في المسودة المقترحة:</strong> إذا كان تقاعدك المستهدف بعد عام 2030، ستبدأ هذه الاشتراكات بالارتفاع التدريجي المذكور سابقاً، وهو ما تحسبه هذه الأداة لك بدقة.</p>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <button class="accordion-btn">كيف تتأثر شروط تقاعد الشيخوخة الوجوبي؟ <i class="fa-solid fa-chevron-down accordion-icon"></i></button>
+            <div class="accordion-content">
+                <p>حالياً (قانون 2014)، سن الشيخوخة هو 60 للذكور و55 للإناث مع توفر 180 اشتراكاً (15 سنة) كحد أدنى. إذا طُبقت التعديلات، وكما توضح الحاسبة، سيتم رفع السن تدريجياً ليصل كحد أقصى إلى 65 للذكور و60 للإناث، وسيتم رفع عدد الاشتراكات المطلوبة تدريجياً لتصل كحد أقصى إلى 240 اشتراكاً (20 سنة).</p>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <button class="accordion-btn">متى أستحق تعويض الدفعة الواحدة وكيف يُحسب؟ <i class="fa-solid fa-chevron-down accordion-icon"></i></button>
+            <div class="accordion-content">
+                <p>تستحق تعويض الدفعة الواحدة إذا بلغت السن القانوني للشيخوخة ولم تستوفِ شروط التقاعد (نقص في عدد الاشتراكات)، ورغبت بتصفية حقوقك. المسودة الجديدة تقترح إضافة نسب زيادة قانونية لتشجيع المشتركين: زيادة 10% إذا كانت الاشتراكات أقل من 120 شهراً، و12% إذا كانت بين 120 و215 شهراً، و15% إذا بلغت 216 شهراً فأكثر. تقوم الحاسبة بتقدير هذا المبلغ لك بناءً على راتبك واشتراكاتك.</p>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <button class="accordion-btn">هل تعتمد هذه الحاسبة على القانون القديم أم الجديد؟ <i class="fa-solid fa-chevron-down accordion-icon"></i></button>
+            <div class="accordion-content">
+                <p>تقوم الحاسبة بإجراء مقارنة ذكية ومباشرة بين الاثنين معاً؛ فهي تعرض لك موقفك التقاعدي بناءً على القانون الساري (2014)، وبنفس الوقت تعرض لك الموقف المتوقع بناءً على التدرج الوارد في مسودة التعديلات، لتعطيك صورة واضحة وشاملة تساعدك على التخطيط لمستقبلك.</p>
+            </div>
+        </div>
+    </div>
     <div class="copyright-footer">
         <p>&copy; 2026 جميع الحقوق محفوظة - تم التطوير والبرمجة بواسطة نورالدين السوالمه</p>
         <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px; direction: ltr;">
@@ -271,6 +361,10 @@
             <a href="mailto:NOUR.AL3NEZI@HOTMAIL.COM" title="راسلني عبر البريد الإلكتروني"><i class="fa-solid fa-envelope"></i></a>
         </div>
     </div>
+
+    <a href="https://api.whatsapp.com/send?text=%D8%AD%D8%A7%D8%B3%D8%A8%D8%A9%20%D9%85%D9%85%D8%AA%D8%A7%D8%B2%D8%A9%20%D9%88%D8%AA%D8%AC%D8%B1%D9%8A%D8%A8%D9%8A%D8%A9%20%D9%84%D9%84%D8%B6%D9%85%D8%A7%D9%86%20%D8%A7%D9%84%D8%A7%D8%AC%D8%AA%D9%85%D8%A7%D8%B9%D9%8A%20%D8%A7%D9%84%D8%A3%D8%B1%D8%AF%D9%86%D9%8A%D8%8C%20%D8%AA%D8%AD%D8%B3%D8%A8%20%D9%84%D9%83%20%D9%85%D8%AA%D9%89%20%D8%AA%D8%AA%D9%82%D8%A7%D8%B9%D8%AF%20%D9%88%D8%AA%D9%82%D8%A7%D8%B1%D9%86%20%D8%A8%D9%8A%D9%86%20%D9%82%D8%A7%D9%86%D9%88%D9%86%202014%20%D9%88%D9%85%D8%B3%D9%88%D8%AF%D8%A9%20%D8%A7%D9%84%D8%AA%D8%B9%D8%AF%D9%8A%D9%84%D8%A7%D8%AA%20%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9.%20%D8%AC%D8%B1%D8%A8%D9%87%D8%A7%20%D9%85%D9%86%20%D9%87%D9%86%D8%A7%3A%0Ahttps%3A%2F%2Fnourenzi.github.io%2Fpension%2F" class="floating-wa-btn" target="_blank" title="شارك الحاسبة عبر واتساب">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
 
 <script>
     // [برمجة مفتاح الوضع الليلي]
@@ -485,6 +579,59 @@
         }
         
         document.getElementById("resultBox").style.display = "block";
+
+        // استدعاء دالة تحديث رابط المشاركة بمجرد الانتهاء من الحساب
+        updateWhatsAppLink();
+    }
+
+    // [برمجة نظام الأكورديون للأسئلة الشائعة]
+    const accordions = document.querySelectorAll(".accordion-btn");
+    accordions.forEach(acc => {
+        acc.addEventListener("click", function() {
+            this.classList.toggle("active");
+            const content = this.nextElementSibling;
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        });
+    });
+
+    // [دالة تحديث الرابط الحقيقي لتجنب الشاشة البيضاء المزعجة]
+    function updateWhatsAppLink() {
+        let resAge = document.getElementById("resAge").innerText;
+        let resCont = document.getElementById("resCont").innerText;
+        
+        let oldEarlyBoxHTML = document.getElementById("oldEarlyBox").innerHTML;
+        let oldMandBoxHTML = document.getElementById("oldMandatoryBox").innerHTML;
+        let newEarlyBoxHTML = document.getElementById("newEarlyBox").innerHTML;
+        let newMandBoxHTML = document.getElementById("newMandatoryBox").innerHTML;
+
+        let oldEarlyStatus = (oldEarlyBoxHTML.includes("مستوفى الشروط") && !oldEarlyBoxHTML.includes("غير مستوفى")) ? "✅ أستوفي الشروط" : "❌ لا أستوفي الشروط";
+        let oldMandStatus = (oldMandBoxHTML.includes("مستوفى الشروط") && !oldMandBoxHTML.includes("غير مستوفى")) ? "✅ أستوفي الشروط" : "❌ لا أستوفي الشروط";
+        
+        let newEarlyStatus = (newEarlyBoxHTML.includes("مستوفى الشروط") && !newEarlyBoxHTML.includes("غير مستوفى")) ? "✅ أستوفي الشروط" : "❌ لا أستوفي الشروط";
+        let newMandStatus = (newMandBoxHTML.includes("مستوفى الشروط") && !newMandBoxHTML.includes("غير مستوفى")) ? "✅ أستوفي الشروط" : "❌ لا أستوفي الشروط";
+
+        let msg = `مرحباً! استخدمت حاسبة التقاعد التجريبية للضمان الاجتماعي 🇯🇴.\n\n`;
+        msg += `تخطيطي للتقاعد على عمر (${resAge}) عاماً، بإجمالي اشتراكات (${resCont}) شهراً.\n\n`;
+        
+        msg += `⚖️ *حسب قانون 2014 الساري:*\n`;
+        msg += `▪️ التقاعد المبكر: ${oldEarlyStatus}\n`;
+        msg += `▪️ تقاعد الشيخوخة الوجوبي: ${oldMandStatus}\n\n`;
+        
+        msg += `⚖️ *حسب التعديلات المقترحة:*\n`;
+        msg += `▪️ التقاعد المبكر: ${newEarlyStatus}\n`;
+        msg += `▪️ تقاعد الشيخوخة الوجوبي: ${newMandStatus}\n\n`;
+
+        msg += `جرب الأداة وقارن وضعك التقاعدي بنفسك من هنا:\nhttps://nourenzi.github.io/pension/`;
+
+        // استخدام واجهة API الرسمية والآمنة للواتساب لتجنب النوافذ المنبثقة
+        let waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+        
+        // تحديث مسار الرابط للزر المخفي 
+        document.getElementById("shareResultsBtn").href = waUrl;
     }
 </script>
 </body>
