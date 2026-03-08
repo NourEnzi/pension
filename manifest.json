@@ -1,0 +1,23 @@
+{
+  "name": "مستشارك لحساب تقاعد الضمان الأردني",
+  "short_name": "الحاسبة الوطنية",
+  "description": "تطبيق مجاني لحساب التقاعد المبكر وتقاعد الشيخوخة حسب قانون الضمان الاجتماعي الأردني.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0e8a43",
+  "dir": "rtl",
+  "lang": "ar",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
