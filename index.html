@@ -13,6 +13,9 @@
     <meta name="robots" content="index, follow">
     <link rel="icon" type="image/png" href="favicon.png">
 
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0e8a43">
+
     <meta property="og:title" content="حاسبة التقاعد التجريبية - الضمان الاجتماعي الأردني">
     <meta property="og:description" content="أداة سريعة ومجانية لمحاكاة شروط التقاعد ومقارنتها مع مسودة التعديلات المقترحة. جربها الآن.">
     <meta property="og:type" content="website">
@@ -27,6 +30,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         /* المتغيرات الأساسية (الوضع النهاري) */
         :root { 
@@ -99,21 +103,6 @@
             margin-top: 20px; box-sizing: border-box; position: relative;
             transition: background-color 0.4s ease;
         }
-        
-        .dark-mode-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            color: var(--title-color);
-            cursor: pointer;
-            transition: color 0.3s ease, transform 0.2s ease;
-        }
-        .dark-mode-btn:hover {
-            transform: scale(1.1);
-        }
 
         .disclaimer-box { background-color: var(--disclaimer-bg); border: 1px solid var(--disclaimer-border); color: var(--disclaimer-text); padding: 15px; border-radius: 8px; margin-bottom: 25px; font-size: 14.5px; line-height: 1.6; display: flex; align-items: flex-start; gap: 12px; transition: all 0.4s ease; }
         .disclaimer-box i { font-size: 22px; margin-top: 3px; }
@@ -136,7 +125,6 @@
         .print-btn { background-color: #2c3e50; margin-top: 20px; width: 100%; padding: 15px; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease; }
         .print-btn:hover { background-color: #34495e; }
         
-        /* تصميم زر الواتساب لمشاركة النتائج */
         .share-wa-btn { background-color: #25d366; margin-top: 15px; width: 100%; padding: 15px; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease; display: flex; justify-content: center; align-items: center; gap: 10px; text-decoration: none; box-sizing: border-box; }
         .share-wa-btn:hover { background-color: #128c7e; color: white; }
 
@@ -158,19 +146,12 @@
         .lump-sum-amount { font-size: 26px; font-weight: bold; color: #e67e22; margin: 10px 0; }
         .lump-sum-details { font-size: 14px; color: var(--text-muted); margin-top: 10px; line-height: 1.5; transition: color 0.4s ease; }
 
-        .copyright-footer {
-            margin-top: 30px; margin-bottom: 20px; text-align: center;
-            font-size: 14px; color: var(--text-muted); font-weight: bold;
-            width: 100%; max-width: 850px;
-            display: flex; flex-direction: column; align-items: center; gap: 10px;
-            transition: color 0.4s ease;
-        }
+        .copyright-footer { margin-top: 30px; margin-bottom: 20px; text-align: center; font-size: 14px; color: var(--text-muted); font-weight: bold; width: 100%; max-width: 850px; display: flex; flex-direction: column; align-items: center; gap: 10px; transition: color 0.4s ease; }
         .copyright-footer p { margin: 0; }
         .social-links { display: flex; gap: 18px; margin-top: 5px; }
         .social-links a { color: var(--text-muted); font-size: 24px; transition: color 0.3s ease, transform 0.2s ease; }
         .social-links a:hover { color: var(--title-color); transform: translateY(-3px); }
 
-        /* تنسيقات قسم الأسئلة الشائعة (نظام الأكورديون) */
         .faq-accordion { margin-top: 30px; width: 100%; max-width: 850px; text-align: right; }
         .faq-accordion h2 { color: var(--title-color); border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-bottom: 20px; font-size: 22px; text-align: right; }
         .accordion-item { border: 1px solid var(--border-col); border-radius: 8px; margin-bottom: 10px; overflow: hidden; background-color: var(--calc-bg); transition: background-color 0.4s ease, border-color 0.4s ease; }
@@ -181,36 +162,59 @@
         .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background-color: var(--calc-bg); }
         .accordion-content p { margin: 0; padding: 0 20px 20px 20px; color: var(--text-main); line-height: 1.7; font-size: 15px; }
 
-        /* تنسيقات زر الواتساب العائم الدائم */
-        .floating-wa-btn {
+        /* --- القائمة العائمة الجديدة (العمود) --- */
+        .floating-action-menu {
             position: fixed;
             bottom: 25px;
-            left: 25px; 
-            background-color: #25d366;
-            color: white;
-            border-radius: 50%;
+            left: 25px;
+            display: flex;
+            flex-direction: column; /* ترتيب من الأعلى للأسفل */
+            gap: 15px; /* المسافة بين الأزرار */
+            z-index: 1000;
+        }
+
+        .floating-btn {
             width: 60px;
             height: 60px;
-            font-size: 32px;
+            border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            z-index: 1000;
-            text-decoration: none;
-            transition: transform 0.3s ease, background-color 0.3s ease;
-        }
-        .floating-wa-btn:hover {
-            transform: scale(1.1);
-            background-color: #128c7e;
+            font-size: 26px;
             color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+            text-decoration: none;
         }
 
-        @media (max-width: 768px) { .comparison-grid { grid-template-columns: 1fr; } .calculator-section { padding: 20px; } .floating-wa-btn { bottom: 20px; left: 20px; width: 55px; height: 55px; font-size: 28px; } }
+        .floating-btn:hover { transform: scale(1.1); }
+
+        /* زر الوضع الليلي العائم */
+        .dark-mode-float { background-color: #2c3e50; }
+        .dark-mode-float:hover { background-color: #1a252f; }
+        body.dark-mode .dark-mode-float { background-color: #444; color: #f1c40f; }
+
+        /* زر تنزيل التطبيق العائم */
+        .install-float { background-color: #3498db; display: flex; }
+        .install-float:hover { background-color: #2980b9; }
+
+        /* زر الواتساب العائم */
+        .wa-float { background-color: #25d366; }
+        .wa-float:hover { background-color: #128c7e; color: white; }
+
+        @media (max-width: 768px) { 
+            .comparison-grid { grid-template-columns: 1fr; } 
+            .calculator-section { padding: 20px; } 
+            .floating-action-menu { bottom: 20px; left: 20px; gap: 12px; }
+            .floating-btn { width: 50px; height: 50px; font-size: 22px; }
+        }
+        
         @media print {
             body { background-color: #fff !important; color: #000 !important; padding: 0; display: block; }
             .calculator-section { box-shadow: none; padding: 0; max-width: 100%; margin-top: 0; background-color: #fff !important; }
-            .dark-mode-btn, .disclaimer-box, .form-row, .calc-btn, .print-btn, .share-wa-btn, .copyright-footer, .faq-accordion, .floating-wa-btn { display: none !important; }
+            .disclaimer-box, .form-row, .calc-btn, .print-btn, .share-wa-btn, .copyright-footer, .faq-accordion, .floating-action-menu { display: none !important; }
             .social-links { display: none !important; }
             .result-section { display: block !important; }
             .law-column, .lump-sum-box { page-break-inside: avoid; border: 1px solid #ccc; background-color: #fff !important; color: #000 !important;}
@@ -218,43 +222,29 @@
     </style>
 </head>
 <body>
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5SPRQZF3"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-55PRQZF3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    
     <main class="calculator-section">
-        <button id="darkModeToggle" class="dark-mode-btn" title="تبديل الوضع الليلي">
-            <i class="fa-solid fa-moon"></i>
-        </button>
-        
         <h2>حاسبة التقاعد التجريبية - الضمان الاجتماعي الأردني<br><span style="font-size: 16px; color: var(--text-muted); font-weight: normal;">(محاكاة لمسودة التعديلات المقترحة)</span></h2>
         
         <div class="disclaimer-box">
             <i class="fa-solid fa-triangle-exclamation"></i>
-            <div>
-                <strong>تنويه هام:</strong> هذه الأداة هي نموذج "تجريبي واسترشادي" فقط، تم برمجتها بناءً على مسودة التعديلات الحديثة المقترحة لقانون الضمان الاجتماعي. النتائج الصادرة عنها هي لغايات التقييم الأولي ولا تعتبر سنداً قانونياً أو قراراً رسمياً، حيث أن التعديلات لم تقر بشكل نهائي بعد.
-            </div>
+            <div><strong>تنويه هام:</strong> هذه الأداة هي نموذج "تجريبي واسترشادي" فقط، تم برمجتها بناءً على مسودة التعديلات الحديثة المقترحة لقانون الضمان الاجتماعي. النتائج الصادرة عنها هي لغايات التقييم الأولي ولا تعتبر سنداً قانونياً أو قراراً رسمياً، حيث أن التعديلات لم تقر بشكل نهائي بعد.</div>
         </div>
 
         <div class="form-row">
             <div class="form-group">
                 <label>تاريخ الميلاد (الشهر والسنة):</label>
                 <div class="date-selectors">
-                    <select id="birthMonth">
-                        <option value="" disabled selected>الشهر</option>
-                    </select>
-                    <select id="birthYear">
-                        <option value="" disabled selected>السنة</option>
-                    </select>
+                    <select id="birthMonth"><option value="" disabled selected>الشهر</option></select>
+                    <select id="birthYear"><option value="" disabled selected>السنة</option></select>
                 </div>
             </div>
             <div class="form-group">
                 <label>تاريخ التعيين للاشتراك المتصل:</label>
                 <div class="date-selectors">
-                    <select id="appointmentMonth">
-                        <option value="">الشهر</option>
-                    </select>
-                    <select id="appointmentYear">
-                        <option value="">السنة</option>
-                    </select>
+                    <select id="appointmentMonth"><option value="">الشهر</option></select>
+                    <select id="appointmentYear"><option value="">السنة</option></select>
                 </div>
                 <span class="optional-note">(اختياري: اتركه فارغاً للقطاع الخاص المتقطع)</span>
             </div>
@@ -310,59 +300,38 @@
                 <p class="lump-sum-details" id="lumpSumDetails"></p>
             </div>
             
-            <a id="whatsapp-share-btn" class="share-wa-btn" href="#" target="_blank">
-                <i class="fa-brands fa-whatsapp" style="font-size: 20px;"></i>
-                شارك نتيجتك وحالتك التقاعدية عبر واتساب
-            </a>
-            
+            <a id="whatsapp-share-btn" class="share-wa-btn" href="#" target="_blank"><i class="fa-brands fa-whatsapp" style="font-size: 20px;"></i> شارك نتيجتك وحالتك التقاعدية عبر واتساب</a>
             <button id="print-btn" class="print-btn" onclick="window.print()">🖨️ طباعة أو حفظ التقرير بصيغة PDF</button>
         </div>
     </main>
 
     <div class="faq-accordion">
         <h2>أسئلة شائعة وتفاصيل التعديلات المقترحة</h2>
-        
         <div class="accordion-item">
             <button class="accordion-btn">ما هو التغيير الذي سيحدث إذا طُبقت المسودة؟ <i class="fa-solid fa-chevron-down accordion-icon"></i></button>
-            <div class="accordion-content">
-                <p>تقترح مسودة التعديلات <strong>رفعاً تدريجياً لسن تقاعد الشيخوخة الوجوبي وعدد الاشتراكات المطلوبة</strong>، ويبدأ هذا التدرج اعتباراً من عام 2030. حيث سيزداد سن التقاعد الوجوبي بواقع 6 أشهر سنوياً (ليصل كحد أقصى إلى 65 للذكور و60 للإناث). كما سترتفع الاشتراكات المطلوبة للتقاعد المبكر والوجوبي بواقع 6 أشهر إضافية عن كل سنة تلي عام 2030 (بحد أقصى 360 اشتراكاً للمبكر للذكور و300 للإناث، و240 اشتراكاً للوجوبي للجنسين).</p>
-            </div>
+            <div class="accordion-content"><p>تقترح مسودة التعديلات <strong>رفعاً تدريجياً لسن تقاعد الشيخوخة الوجوبي وعدد الاشتراكات المطلوبة</strong>، ويبدأ هذا التدرج اعتباراً من عام 2030. حيث سيزداد سن التقاعد الوجوبي بواقع 6 أشهر سنوياً (ليصل كحد أقصى إلى 65 للذكور و60 للإناث). كما سترتفع الاشتراكات المطلوبة للتقاعد المبكر والوجوبي بواقع 6 أشهر إضافية عن كل سنة تلي عام 2030 (بحد أقصى 360 اشتراكاً للمبكر للذكور و300 للإناث، و240 اشتراكاً للوجوبي للجنسين).</p></div>
         </div>
-
         <div class="accordion-item">
             <button class="accordion-btn">ما هي شروط التقاعد المبكر للذكور والإناث؟ <i class="fa-solid fa-chevron-down accordion-icon"></i></button>
-            <div class="accordion-content">
-                <p>تختلف الشروط حسب القانون وطبيعة العمل:<br>
-                <strong>في القانون الحالي (2014):</strong> للتقاعد المبكر العام، يُشترط بلوغ سن 50 عاماً مع 252 اشتراكاً للذكور، و228 للإناث. أما للمهن الخطرة (المبكر الخاص)، فيُشترط بلوغ 45 عاماً مع 300 اشتراك للذكور، و264 للإناث.<br>
-                <strong>في المسودة المقترحة:</strong> إذا كان تقاعدك المستهدف بعد عام 2030، ستبدأ هذه الاشتراكات بالارتفاع التدريجي المذكور سابقاً، وهو ما تحسبه هذه الأداة لك بدقة.</p>
-            </div>
+            <div class="accordion-content"><p>تختلف الشروط حسب القانون وطبيعة العمل:<br><strong>في القانون الحالي (2014):</strong> للتقاعد المبكر العام، يُشترط بلوغ سن 50 عاماً مع 252 اشتراكاً للذكور، و228 للإناث. أما للمهن الخطرة (المبكر الخاص)، فيُشترط بلوغ 45 عاماً مع 300 اشتراك للذكور، و264 للإناث.<br><strong>في المسودة المقترحة:</strong> إذا كان تقاعدك المستهدف بعد عام 2030، ستبدأ هذه الاشتراكات بالارتفاع التدريجي المذكور سابقاً، وهو ما تحسبه هذه الأداة لك بدقة.</p></div>
         </div>
-
         <div class="accordion-item">
             <button class="accordion-btn">كيف تتأثر شروط تقاعد الشيخوخة الوجوبي؟ <i class="fa-solid fa-chevron-down accordion-icon"></i></button>
-            <div class="accordion-content">
-                <p>حالياً (قانون 2014)، سن الشيخوخة هو 60 للذكور و55 للإناث مع توفر 180 اشتراكاً (15 سنة) كحد أدنى. إذا طُبقت التعديلات، وكما توضح الحاسبة، سيتم رفع السن تدريجياً ليصل كحد أقصى إلى 65 للذكور و60 للإناث، وسيتم رفع عدد الاشتراكات المطلوبة تدريجياً لتصل كحد أقصى إلى 240 اشتراكاً (20 سنة).</p>
-            </div>
+            <div class="accordion-content"><p>حالياً (قانون 2014)، سن الشيخوخة هو 60 للذكور و55 للإناث مع توفر 180 اشتراكاً (15 سنة) كحد أدنى. إذا طُبقت التعديلات، وكما توضح الحاسبة، سيتم رفع السن تدريجياً ليصل كحد أقصى إلى 65 للذكور و60 للإناث، وسيتم رفع عدد الاشتراكات المطلوبة تدريجياً لتصل كحد أقصى إلى 240 اشتراكاً (20 سنة).</p></div>
         </div>
-
         <div class="accordion-item">
             <button class="accordion-btn">متى أستحق تعويض الدفعة الواحدة وكيف يُحسب؟ <i class="fa-solid fa-chevron-down accordion-icon"></i></button>
-            <div class="accordion-content">
-                <p>تستحق تعويض الدفعة الواحدة إذا بلغت السن القانوني للشيخوخة ولم تستوفِ شروط التقاعد (نقص في عدد الاشتراكات)، ورغبت بتصفية حقوقك. المسودة الجديدة تقترح إضافة نسب زيادة قانونية لتشجيع المشتركين: زيادة 10% إذا كانت الاشتراكات أقل من 120 شهراً، و12% إذا كانت بين 120 و215 شهراً، و15% إذا بلغت 216 شهراً فأكثر. تقوم الحاسبة بتقدير هذا المبلغ لك بناءً على راتبك واشتراكاتك.</p>
-            </div>
+            <div class="accordion-content"><p>تستحق تعويض الدفعة الواحدة إذا بلغت السن القانوني للشيخوخة ولم تستوفِ شروط التقاعد (نقص في عدد الاشتراكات)، ورغبت بتصفية حقوقك. المسودة الجديدة تقترح إضافة نسب زيادة قانونية لتشجيع المشتركين: زيادة 10% إذا كانت الاشتراكات أقل من 120 شهراً، و12% إذا كانت بين 120 و215 شهراً، و15% إذا بلغت 216 شهراً فأكثر. تقوم الحاسبة بتقدير هذا المبلغ لك بناءً على راتبك واشتراكاتك.</p></div>
         </div>
-
         <div class="accordion-item">
             <button class="accordion-btn">هل تعتمد هذه الحاسبة على القانون القديم أم الجديد؟ <i class="fa-solid fa-chevron-down accordion-icon"></i></button>
-            <div class="accordion-content">
-                <p>تقوم الحاسبة بإجراء مقارنة ذكية ومباشرة بين الاثنين معاً؛ فهي تعرض لك موقفك التقاعدي بناءً على القانون الساري (2014)، وبنفس الوقت تعرض لك الموقف المتوقع بناءً على التدرج الوارد في مسودة التعديلات، لتعطيك صورة واضحة وشاملة تساعدك على التخطيط لمستقبلك.</p>
-            </div>
+            <div class="accordion-content"><p>تقوم الحاسبة بإجراء مقارنة ذكية ومباشرة بين الاثنين معاً؛ فهي تعرض لك موقفك التقاعدي بناءً على القانون الساري (2014)، وبنفس الوقت تعرض لك الموقف المتوقع بناءً على التدرج الوارد في مسودة التعديلات، لتعطيك صورة واضحة وشاملة تساعدك على التخطيط لمستقبلك.</p></div>
         </div>
     </div>
+
     <div class="copyright-footer">
         <p>&copy; 2026 جميع الحقوق محفوظة - تم التطوير والبرمجة بواسطة نورالدين السوالمه</p>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px; direction: ltr;">
-        Version: <span style="font-weight: bold;">v3.3.0</span>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px; direction: ltr;">Version: <span style="font-weight: bold;">v3.3.0</span></p>
         <div class="social-links">
             <a href="https://www.linkedin.com/in/nour-eddin-alsawalmeh-91801255/" target="_blank" title="تواصل معي على لينكد إن"><i class="fa-brands fa-linkedin"></i></a>
             <a href="https://github.com/NourEnzi" target="_blank" title="حسابي ومشاريعي على جيت هب"><i class="fa-brands fa-github"></i></a>
@@ -370,278 +339,259 @@
         </div>
     </div>
 
-    <a id="floating-wa-btn" href="https://api.whatsapp.com/send?text=%D8%AD%D8%A7%D8%B3%D8%A8%D8%A9%20%D9%85%D9%85%D8%AA%D8%A7%D8%B2%D8%A9%20%D9%88%D8%AA%D8%AC%D8%B1%D9%8A%D8%A8%D9%8A%D8%A9%20%D9%84%D9%84%D8%B6%D9%85%D8%A7%D9%86%20%D8%A7%D9%84%D8%A7%D8%AC%D8%AA%D9%85%D8%A7%D8%B9%D9%8A%20%D8%A7%D9%84%D8%A3%D8%B1%D8%AF%D9%86%D9%8A%D8%8C%20%D8%AA%D8%AD%D8%B3%D8%A8%20%D9%84%D9%83%20%D9%85%D8%AA%D9%89%20%D8%AA%D8%AA%D9%82%D8%A7%D8%B9%D8%AF%20%D9%88%D8%AA%D9%82%D8%A7%D8%B1%D9%86%20%D8%A8%D9%8A%D9%86%20%D9%82%D8%A7%D9%86%D9%88%D9%86%202014%20%D9%88%D9%85%D8%B3%D9%88%D8%AF%D8%A9%20%D8%A7%D9%84%D8%AA%D8%B9%D8%AF%D9%8A%D9%84%D8%A7%D8%AA%20%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9.%20%D8%AC%D8%B1%D8%A8%D9%87%D8%A7%20%D9%85%D9%86%20%D9%87%D9%86%D8%A7%3A%0Ahttps%3A%2F%2Fnourenzi.github.io%2Fpension%2F" class="floating-wa-btn" target="_blank" title="شارك الحاسبة عبر واتساب">
-        <i class="fa-brands fa-whatsapp"></i>
-    </a>
-
-<script>
-    // [برمجة مفتاح الوضع الليلي]
-    document.getElementById("darkModeToggle").addEventListener("click", function() {
-        document.body.classList.toggle("dark-mode");
-        let icon = this.querySelector("i");
-        if(document.body.classList.contains("dark-mode")) {
-            icon.classList.remove("fa-moon");
-            icon.classList.add("fa-sun");
-            icon.style.color = "#f1c40f"; // لون أصفر للشمس
-        } else {
-            icon.classList.remove("fa-sun");
-            icon.classList.add("fa-moon");
-            icon.style.color = ""; // العودة للون الأصلي للقمر
-        }
-    });
-
-    // [توليد التواريخ ديناميكياً بناءً على السنة الحالية]
-    document.addEventListener("DOMContentLoaded", function() {
-        const currentYear = new Date().getFullYear(); 
+    <div class="floating-action-menu">
+        <button id="darkModeToggle" class="floating-btn dark-mode-float" title="تبديل الوضع الليلي">
+            <i class="fa-solid fa-moon"></i>
+        </button>
         
-        const bMonth = document.getElementById("birthMonth");
-        const aMonth = document.getElementById("appointmentMonth");
-        for (let m = 1; m <= 12; m++) {
-            bMonth.add(new Option(m, m));
-            aMonth.add(new Option(m, m));
-        }
+        <button id="installAppBtn" class="floating-btn install-float" title="تنزيل الحاسبة كتطبيق">
+            <i class="fa-solid fa-download"></i>
+        </button>
 
-        const bYearSelect = document.getElementById("birthYear");
-        const maxBirthYear = currentYear - 15;
-        for (let y = maxBirthYear; y >= 1950; y--) {
-            bYearSelect.add(new Option(y, y));
-        }
+        <a id="floating-wa-btn" href="https://api.whatsapp.com/send?text=%D8%AD%D8%A7%D8%B3%D8%A8%D8%A9%20%D9%85%D9%85%D8%AA%D8%A7%D8%B2%D8%A9%20%D9%88%D8%AA%D8%AC%D8%B1%D9%8A%D8%A8%D9%8A%D8%A9%20%D9%84%D9%84%D8%B6%D9%85%D8%A7%D9%86%20%D8%A7%D9%84%D8%A7%D8%AC%D8%AA%D9%85%D8%A7%D8%B9%D9%8A%20%D8%A7%D9%84%D8%A3%D8%B1%D8%AF%D9%86%D9%8A%D8%8C%20%D8%AA%D8%AD%D8%B3%D8%A8%20%D9%84%D9%83%20%D9%85%D8%AA%D9%89%20%D8%AA%D8%AA%D9%82%D8%A7%D8%B9%D8%AF%20%D9%88%D8%AA%D9%82%D8%A7%D8%B1%D9%86%20%D8%A8%D9%8A%D9%86%20%D9%82%D8%A7%D9%86%D9%88%D9%86%202014%20%D9%88%D9%85%D8%B3%D9%88%D8%AF%D8%A9%20%D8%A7%D9%84%D8%AA%D8%B9%D8%AF%D9%8A%D9%84%D8%A7%D8%AA%20%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9.%20%D8%AC%D8%B1%D8%A8%D9%87%D8%A7%20%D9%85%D9%86%20%D9%87%D9%86%D8%A7%3A%0Ahttps%3A%2F%2Fnourenzi.github.io%2Fpension%2F" class="floating-btn wa-float" target="_blank" title="شارك الحاسبة عبر واتساب">
+            <i class="fa-brands fa-whatsapp"></i>
+        </a>
+    </div>
 
-        const aYearSelect = document.getElementById("appointmentYear");
-        const minAppYear = currentYear - 70;
-        for (let y = currentYear; y >= minAppYear; y--) {
-            aYearSelect.add(new Option(y, y));
-        }
-    });
-
-    // [طبقة الحماية]
-    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
-    document.onkeydown = function(e) {
-        if(e.keyCode == 123) return false; 
-        if(e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) return false; 
-        if(e.ctrlKey && e.keyCode == 85) return false; 
-    };
-
-    // [الخوارزمية المزدوجة المحدثة للعمل مع القوائم المنسدلة]
-    function autoF(){
-        let bYear = document.getElementById("birthYear").value;
-        let bMonth = document.getElementById("birthMonth").value;
-        let aYear = document.getElementById("appointmentYear").value;
-        let aMonth = document.getElementById("appointmentMonth").value;
-        let tInput = parseInt(document.getElementById("targetInput").value);
-        let c = document.getElementById("expectedCont");
-        
-        if(bYear && bMonth && tInput){
-            let y = parseInt(bYear);
-            let targetYear = tInput <= 100 ? y + tInput : tInput; 
-            
-            if(aYear && aMonth){
-                let appY = parseInt(aYear);
-                let appM = parseInt(aMonth);
-                let bM = parseInt(bMonth);
-                let months = (targetYear - appY) * 12 + (bM - appM);
-                c.value = months > 0 ? months : 0;
-                c.readOnly = true;
-                c.style.backgroundColor = "var(--info-header-bg)";
+    <script>
+        document.getElementById("darkModeToggle").addEventListener("click", function() {
+            document.body.classList.toggle("dark-mode");
+            let icon = this.querySelector("i");
+            if(document.body.classList.contains("dark-mode")) {
+                icon.classList.remove("fa-moon");
+                icon.classList.add("fa-sun");
+                icon.style.color = "#f1c40f"; 
             } else {
-                let ageAtTarget = targetYear - y;
-                let yearsOfWork = ageAtTarget - 22;
-                c.value = yearsOfWork > 0 ? yearsOfWork * 12 : 0;
+                icon.classList.remove("fa-sun");
+                icon.classList.add("fa-moon");
+                icon.style.color = ""; 
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const currentYear = new Date().getFullYear(); 
+            const bMonth = document.getElementById("birthMonth");
+            const aMonth = document.getElementById("appointmentMonth");
+            for (let m = 1; m <= 12; m++) { bMonth.add(new Option(m, m)); aMonth.add(new Option(m, m)); }
+            const bYearSelect = document.getElementById("birthYear");
+            const maxBirthYear = currentYear - 15;
+            for (let y = maxBirthYear; y >= 1950; y--) { bYearSelect.add(new Option(y, y)); }
+            const aYearSelect = document.getElementById("appointmentYear");
+            const minAppYear = currentYear - 70;
+            for (let y = currentYear; y >= minAppYear; y--) { aYearSelect.add(new Option(y, y)); }
+        });
+
+        document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+        document.onkeydown = function(e) {
+            if(e.keyCode == 123) return false; 
+            if(e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) return false; 
+            if(e.ctrlKey && e.keyCode == 85) return false; 
+        };
+
+        function autoF(){
+            let bYear = document.getElementById("birthYear").value;
+            let bMonth = document.getElementById("birthMonth").value;
+            let aYear = document.getElementById("appointmentYear").value;
+            let aMonth = document.getElementById("appointmentMonth").value;
+            let tInput = parseInt(document.getElementById("targetInput").value);
+            let c = document.getElementById("expectedCont");
+            
+            if(bYear && bMonth && tInput){
+                let y = parseInt(bYear);
+                let targetYear = tInput <= 100 ? y + tInput : tInput; 
+                if(aYear && aMonth){
+                    let appY = parseInt(aYear);
+                    let appM = parseInt(aMonth);
+                    let bM = parseInt(bMonth);
+                    let months = (targetYear - appY) * 12 + (bM - appM);
+                    c.value = months > 0 ? months : 0;
+                    c.readOnly = true;
+                    c.style.backgroundColor = "var(--info-header-bg)";
+                } else {
+                    let ageAtTarget = targetYear - y;
+                    let yearsOfWork = ageAtTarget - 22;
+                    c.value = yearsOfWork > 0 ? yearsOfWork * 12 : 0;
+                    c.readOnly = false;
+                    c.style.backgroundColor = "";
+                }
+            } else {
                 c.readOnly = false;
                 c.style.backgroundColor = "";
             }
-        } else {
-            c.readOnly = false;
-            c.style.backgroundColor = "";
         }
-    }
-    
-    document.getElementById("birthMonth").addEventListener("change",autoF);
-    document.getElementById("birthYear").addEventListener("change",autoF);
-    document.getElementById("appointmentMonth").addEventListener("change",autoF);
-    document.getElementById("appointmentYear").addEventListener("change",autoF);
-    document.getElementById("targetInput").addEventListener("input",autoF);
+        
+        document.getElementById("birthMonth").addEventListener("change",autoF);
+        document.getElementById("birthYear").addEventListener("change",autoF);
+        document.getElementById("appointmentMonth").addEventListener("change",autoF);
+        document.getElementById("appointmentYear").addEventListener("change",autoF);
+        document.getElementById("targetInput").addEventListener("input",autoF);
 
-    function calculateAll(){
-        let gender = document.getElementById("gender").value;
-        let bYear = document.getElementById("birthYear").value;
-        let tInput = parseInt(document.getElementById("targetInput").value);
-        let cont = parseInt(document.getElementById("expectedCont").value);
-        let salary = parseFloat(document.getElementById("avgSalary").value) || 0;
-        
-        if(!bYear || !tInput || isNaN(cont) || salary < 0) {
-            return void alert("عذراً، يرجى تعبئة الحقول الأساسية وتجنب القيم السالبة في الراتب.");
-        }
-        
-        let y = parseInt(bYear);
-        let currentRefYear = tInput <= 120 ? y + tInput : tInput;
-        let currentAge = currentRefYear - y;
-        
-        let appY_val = document.getElementById("appointmentYear").value;
-        if(currentRefYear <= y || currentAge <= 0 || currentAge > 120 || (tInput > 120 && tInput < 2024) || (appY_val && (currentRefYear < parseInt(appY_val) || parseInt(appY_val) - y < 16))) {
-            return void alert("بيانات غير قانونية أو غير منطقية: يرجى التحقق من التواريخ (يجب ألا يقل العمر عند التعيين عن 16 عاماً، والتأكد من منطقية العمر المستهدف).");
-        }
-
-        // متغيرات القانون الساري (2014)
-        let oldEarlyGenCont = (gender === "male") ? 252 : 228;
-        let oldEarlySpecCont = (gender === "male") ? 300 : 264;
-        let oldMandatoryCont = 180;
-        let oldMandatoryAge = (gender === "male") ? 60 : 55;
-        
-        // متغيرات مسودة التعديلات المقترحة (تبدأ من القانون الساري وتتدرج)
-        let newEarlyCont = oldEarlyGenCont;
-        let newMandatoryCont = oldMandatoryCont;
-        let newMandatoryAge = oldMandatoryAge;
-
-        if(currentRefYear >= 2030) {
-            let factor = currentRefYear - 2030 + 1;
+        function calculateAll(){
+            let gender = document.getElementById("gender").value;
+            let bYear = document.getElementById("birthYear").value;
+            let tInput = parseInt(document.getElementById("targetInput").value);
+            let cont = parseInt(document.getElementById("expectedCont").value);
+            let salary = parseFloat(document.getElementById("avgSalary").value) || 0;
             
-            // رفع اشتراكات المبكر الجديد
-            newEarlyCont = oldEarlyGenCont + 6 * factor;
-            if(gender === "male" && newEarlyCont > 360) newEarlyCont = 360;
-            if(gender === "female" && newEarlyCont > 300) newEarlyCont = 300;
-            
-            // رفع اشتراكات الوجوبي الجديد
-            newMandatoryCont = oldMandatoryCont + 6 * factor;
-            if(newMandatoryCont > 240) newMandatoryCont = 240;
-            
-            // رفع سن الوجوبي الجديد
-            let maxAge = (gender === "male") ? 65 : 60;
-            newMandatoryAge = oldMandatoryAge + 0.5 * factor;
-            if(newMandatoryAge > maxAge) newMandatoryAge = maxAge;
-        }
-        
-        // حساب تعويض الدفعة الواحدة
-        let lumpSumBase = salary * cont * 0.2175;
-        let multiplier = 1, incrementText = "";
-        
-        if (cont < 120) {
-            multiplier = 1.1; incrementText = "10%";
-        } else if (cont >= 120 && cont < 216) {
-            multiplier = 1.12; incrementText = "12%";
-        } else if (cont >= 216) {
-            multiplier = 1.15; incrementText = "15%";
-        }
-        let totalLumpSum = (lumpSumBase * multiplier).toFixed(2);
-        
-        // دالة مساعدة لتوليد نصوص النتائج العامة
-        function generateOutputHTML(title, isMet, ageReq, contReq, hasDiscount = false) {
-            let html = "";
-            if(isMet) {
-                html = "✅ <strong>" + title + ": مستوفى الشروط</strong><br>تم استيفاء شرط العمر (" + ageReq + ") ورصيد الاشتراكات (" + contReq + ").";
-                if(hasDiscount) {
-                    html += "<span class='discount-note'>⚠️ ملاحظة قانونية: يخضع راتب التقاعد المبكر لنسبة تخفيض (خصم) مقدارها 2% عن كل 6 أشهر تسبق سن التقاعد الوجوبي.</span>";
-                }
-            } else {
-                html = "❌ <strong>" + title + ": غير مستوفى الشروط</strong><br>الحد الأدنى المطلوب: عمر " + ageReq + " واشتراكات " + contReq + ".";
+            if(!bYear || !tInput || isNaN(cont) || salary < 0) {
+                return void alert("عذراً، يرجى تعبئة الحقول الأساسية وتجنب القيم السالبة في الراتب.");
             }
-            return html;
-        }
-        
-        // تحديث البيانات العلوية
-        document.getElementById("resYear").innerText = currentRefYear;
-        document.getElementById("resAge").innerText = currentAge;
-        document.getElementById("resCont").innerText = cont;
-        
-        // المنطق الذكي للقانون الساري - التقاعد المبكر
-        let oldEarlyHTML = "";
-        let oldEarlyClass = "";
-        
-        let metGen = (currentAge >= 50 && cont >= oldEarlyGenCont);
-        let metSpec = (currentAge >= 45 && cont >= oldEarlySpecCont);
+            
+            let y = parseInt(bYear);
+            let currentRefYear = tInput <= 120 ? y + tInput : tInput;
+            let currentAge = currentRefYear - y;
+            
+            let appY_val = document.getElementById("appointmentYear").value;
+            if(currentRefYear <= y || currentAge <= 0 || currentAge > 120 || (tInput > 120 && tInput < 2024) || (appY_val && (currentRefYear < parseInt(appY_val) || parseInt(appY_val) - y < 16))) {
+                return void alert("بيانات غير قانونية أو غير منطقية: يرجى التحقق من التواريخ.");
+            }
 
-        if (metGen) {
-            oldEarlyClass = "status-box success";
-            oldEarlyHTML = "✅ <strong>التقاعد المبكر: مستوفى الشروط</strong><br>تم استيفاء شرط العمر (50) ورصيد الاشتراكات (" + oldEarlyGenCont + ").";
-        } else if (metSpec && !metGen) {
-            oldEarlyClass = "status-box success";
-            oldEarlyHTML = "✅ <strong>التقاعد المبكر: مستوفى الشروط</strong><br>تم استيفاء شرط العمر (45) ورصيد الاشتراكات (" + oldEarlySpecCont + ").<br><br>";
-            oldEarlyHTML += "ℹ️ <strong style='color:#2980b9;'>للتخطيط:</strong> للتقاعد على سن 50، تحتاج إلى " + oldEarlyGenCont + " اشتراكاً (رصيدك الحالي: " + cont + ").";
-        } else {
-            oldEarlyClass = "status-box fail";
-            oldEarlyHTML = "❌ <strong>التقاعد المبكر: غير مستوفى الشروط</strong><br>الحد الأدنى المطلوب أحد المسارين:<br>";
-            oldEarlyHTML += "<ul style='margin: 8px 0; padding-right: 20px;'>";
-            oldEarlyHTML += "<li>عمر 50 واشتراكات " + oldEarlyGenCont + ".</li>";
-            oldEarlyHTML += "<li>عمر 45 واشتراكات " + oldEarlySpecCont + ".</li>";
-            oldEarlyHTML += "</ul>";
-        }
-        
-        document.getElementById("oldEarlyBox").className = oldEarlyClass;
-        document.getElementById("oldEarlyBox").innerHTML = oldEarlyHTML;
-        
-        document.getElementById("oldMandatoryBox").className = "status-box " + (currentAge >= oldMandatoryAge && cont >= oldMandatoryCont ? "success" : "fail");
-        document.getElementById("oldMandatoryBox").innerHTML = generateOutputHTML("تقاعد الشيخوخة الوجوبي", currentAge >= oldMandatoryAge && cont >= oldMandatoryCont, oldMandatoryAge, oldMandatoryCont);
-        
-        document.getElementById("newEarlyBox").className = "status-box " + (currentAge >= 50 && cont >= newEarlyCont ? "success" : "fail");
-        document.getElementById("newEarlyBox").innerHTML = generateOutputHTML("التقاعد المبكر", currentAge >= 50 && cont >= newEarlyCont, 50, newEarlyCont, currentAge >= 50 && cont >= newEarlyCont);
-        
-        document.getElementById("newMandatoryBox").className = "status-box " + (currentAge >= newMandatoryAge && cont >= newMandatoryCont ? "success" : "fail");
-        document.getElementById("newMandatoryBox").innerHTML = generateOutputHTML("تقاعد الشيخوخة الوجوبي", currentAge >= newMandatoryAge && cont >= newMandatoryCont, newMandatoryAge, newMandatoryCont);
-        
-        if(salary > 0 && cont > 0) {
-            document.getElementById("lumpSumResult").innerText = totalLumpSum + " دينار أردني";
-            document.getElementById("lumpSumDetails").innerText = "* تم الحساب التقديري بناءً على متوسط الراتب (" + salary + ")، واشتراكات (" + cont + " شهراً)، بإضافة زيادة قانونية نسبتها " + incrementText + " وفقاً لمسودة التعديلات.";
-        } else {
-            document.getElementById("lumpSumResult").innerText = "يرجى إدخال متوسط الراتب لحساب التكلفة التقديرية";
-            document.getElementById("lumpSumDetails").innerText = "";
-        }
-        
-        document.getElementById("resultBox").style.display = "block";
+            let oldEarlyGenCont = (gender === "male") ? 252 : 228;
+            let oldEarlySpecCont = (gender === "male") ? 300 : 264;
+            let oldMandatoryCont = 180;
+            let oldMandatoryAge = (gender === "male") ? 60 : 55;
+            
+            let newEarlyCont = oldEarlyGenCont;
+            let newMandatoryCont = oldMandatoryCont;
+            let newMandatoryAge = oldMandatoryAge;
 
-        // استدعاء دالة تحديث رابط المشاركة بمجرد الانتهاء من الحساب
-        updateWhatsAppLink();
-    }
+            if(currentRefYear >= 2030) {
+                let factor = currentRefYear - 2030 + 1;
+                newEarlyCont = oldEarlyGenCont + 6 * factor;
+                if(gender === "male" && newEarlyCont > 360) newEarlyCont = 360;
+                if(gender === "female" && newEarlyCont > 300) newEarlyCont = 300;
+                newMandatoryCont = oldMandatoryCont + 6 * factor;
+                if(newMandatoryCont > 240) newMandatoryCont = 240;
+                let maxAge = (gender === "male") ? 65 : 60;
+                newMandatoryAge = oldMandatoryAge + 0.5 * factor;
+                if(newMandatoryAge > maxAge) newMandatoryAge = maxAge;
+            }
+            
+            let lumpSumBase = salary * cont * 0.2175;
+            let multiplier = 1, incrementText = "";
+            if (cont < 120) { multiplier = 1.1; incrementText = "10%"; } 
+            else if (cont >= 120 && cont < 216) { multiplier = 1.12; incrementText = "12%"; } 
+            else if (cont >= 216) { multiplier = 1.15; incrementText = "15%"; }
+            let totalLumpSum = (lumpSumBase * multiplier).toFixed(2);
+            
+            function generateOutputHTML(title, isMet, ageReq, contReq, hasDiscount = false) {
+                let html = "";
+                if(isMet) {
+                    html = "✅ <strong>" + title + ": مستوفى الشروط</strong><br>تم استيفاء شرط العمر (" + ageReq + ") ورصيد الاشتراكات (" + contReq + ").";
+                    if(hasDiscount) html += "<span class='discount-note'>⚠️ ملاحظة قانونية: يخضع راتب التقاعد المبكر لنسبة تخفيض (خصم) مقدارها 2% عن كل 6 أشهر تسبق سن التقاعد الوجوبي.</span>";
+                } else {
+                    html = "❌ <strong>" + title + ": غير مستوفى الشروط</strong><br>الحد الأدنى المطلوب: عمر " + ageReq + " واشتراكات " + contReq + ".";
+                }
+                return html;
+            }
+            
+            document.getElementById("resYear").innerText = currentRefYear;
+            document.getElementById("resAge").innerText = currentAge;
+            document.getElementById("resCont").innerText = cont;
+            
+            let oldEarlyHTML = "", oldEarlyClass = "";
+            let metGen = (currentAge >= 50 && cont >= oldEarlyGenCont);
+            let metSpec = (currentAge >= 45 && cont >= oldEarlySpecCont);
 
-    // [برمجة نظام الأكورديون للأسئلة الشائعة]
-    const accordions = document.querySelectorAll(".accordion-btn");
-    accordions.forEach(acc => {
-        acc.addEventListener("click", function() {
-            this.classList.toggle("active");
-            const content = this.nextElementSibling;
-            if (content.style.maxHeight) {
-                content.style.maxHeight = null;
+            if (metGen) {
+                oldEarlyClass = "status-box success";
+                oldEarlyHTML = "✅ <strong>التقاعد المبكر: مستوفى الشروط</strong><br>تم استيفاء شرط العمر (50) ورصيد الاشتراكات (" + oldEarlyGenCont + ").";
+            } else if (metSpec && !metGen) {
+                oldEarlyClass = "status-box success";
+                oldEarlyHTML = "✅ <strong>التقاعد المبكر: مستوفى الشروط</strong><br>تم استيفاء شرط العمر (45) ورصيد الاشتراكات (" + oldEarlySpecCont + ").<br><br>";
+                oldEarlyHTML += "ℹ️ <strong style='color:#2980b9;'>للتخطيط:</strong> للتقاعد على سن 50، تحتاج إلى " + oldEarlyGenCont + " اشتراكاً (رصيدك الحالي: " + cont + ").";
             } else {
-                content.style.maxHeight = content.scrollHeight + "px";
+                oldEarlyClass = "status-box fail";
+                oldEarlyHTML = "❌ <strong>التقاعد المبكر: غير مستوفى الشروط</strong><br>الحد الأدنى المطلوب أحد المسارين:<br>";
+                oldEarlyHTML += "<ul style='margin: 8px 0; padding-right: 20px;'><li>عمر 50 واشتراكات " + oldEarlyGenCont + ".</li><li>عمر 45 واشتراكات " + oldEarlySpecCont + ".</li></ul>";
+            }
+            
+            document.getElementById("oldEarlyBox").className = oldEarlyClass;
+            document.getElementById("oldEarlyBox").innerHTML = oldEarlyHTML;
+            document.getElementById("oldMandatoryBox").className = "status-box " + (currentAge >= oldMandatoryAge && cont >= oldMandatoryCont ? "success" : "fail");
+            document.getElementById("oldMandatoryBox").innerHTML = generateOutputHTML("تقاعد الشيخوخة الوجوبي", currentAge >= oldMandatoryAge && cont >= oldMandatoryCont, oldMandatoryAge, oldMandatoryCont);
+            document.getElementById("newEarlyBox").className = "status-box " + (currentAge >= 50 && cont >= newEarlyCont ? "success" : "fail");
+            document.getElementById("newEarlyBox").innerHTML = generateOutputHTML("التقاعد المبكر", currentAge >= 50 && cont >= newEarlyCont, 50, newEarlyCont, currentAge >= 50 && cont >= newEarlyCont);
+            document.getElementById("newMandatoryBox").className = "status-box " + (currentAge >= newMandatoryAge && cont >= newMandatoryCont ? "success" : "fail");
+            document.getElementById("newMandatoryBox").innerHTML = generateOutputHTML("تقاعد الشيخوخة الوجوبي", currentAge >= newMandatoryAge && cont >= newMandatoryCont, newMandatoryAge, newMandatoryCont);
+            
+            if(salary > 0 && cont > 0) {
+                document.getElementById("lumpSumResult").innerText = totalLumpSum + " دينار أردني";
+                document.getElementById("lumpSumDetails").innerText = "* تم الحساب التقديري بناءً على متوسط الراتب (" + salary + ")، واشتراكات (" + cont + " شهراً)، بإضافة زيادة قانونية نسبتها " + incrementText + " وفقاً لمسودة التعديلات.";
+            } else {
+                document.getElementById("lumpSumResult").innerText = "يرجى إدخال متوسط الراتب لحساب التكلفة التقديرية";
+                document.getElementById("lumpSumDetails").innerText = "";
+            }
+            
+            document.getElementById("resultBox").style.display = "block";
+            updateWhatsAppLink();
+        }
+
+        const accordions = document.querySelectorAll(".accordion-btn");
+        accordions.forEach(acc => {
+            acc.addEventListener("click", function() {
+                this.classList.toggle("active");
+                const content = this.nextElementSibling;
+                if (content.style.maxHeight) { content.style.maxHeight = null; } 
+                else { content.style.maxHeight = content.scrollHeight + "px"; }
+            });
+        });
+
+        function updateWhatsAppLink() {
+            let resAge = document.getElementById("resAge").innerText;
+            let resCont = document.getElementById("resCont").innerText;
+            let oldEarlyBoxHTML = document.getElementById("oldEarlyBox").innerHTML;
+            let oldMandBoxHTML = document.getElementById("oldMandatoryBox").innerHTML;
+            let newEarlyBoxHTML = document.getElementById("newEarlyBox").innerHTML;
+            let newMandBoxHTML = document.getElementById("newMandatoryBox").innerHTML;
+
+            let oldEarlyStatus = (oldEarlyBoxHTML.includes("مستوفى الشروط") && !oldEarlyBoxHTML.includes("غير مستوفى")) ? "✅ أستوفي الشروط" : "❌ لا أستوفي الشروط";
+            let oldMandStatus = (oldMandBoxHTML.includes("مستوفى الشروط") && !oldMandBoxHTML.includes("غير مستوفى")) ? "✅ أستوفي الشروط" : "❌ لا أستوفي الشروط";
+            let newEarlyStatus = (newEarlyBoxHTML.includes("مستوفى الشروط") && !newEarlyBoxHTML.includes("غير مستوفى")) ? "✅ أستوفي الشروط" : "❌ لا أستوفي الشروط";
+            let newMandStatus = (newMandBoxHTML.includes("مستوفى الشروط") && !newMandBoxHTML.includes("غير مستوفى")) ? "✅ أستوفي الشروط" : "❌ لا أستوفي الشروط";
+
+            let msg = `مرحباً! استخدمت حاسبة التقاعد التجريبية للضمان الاجتماعي 🇯🇴.\n\nتخطيطي للتقاعد على عمر (${resAge}) عاماً، بإجمالي اشتراكات (${resCont}) شهراً.\n\n⚖️ *حسب قانون 2014 الساري:*\n▪️ التقاعد المبكر: ${oldEarlyStatus}\n▪️ تقاعد الشيخوخة الوجوبي: ${oldMandStatus}\n\n⚖️ *حسب التعديلات المقترحة:*\n▪️ التقاعد المبكر: ${newEarlyStatus}\n▪️ تقاعد الشيخوخة الوجوبي: ${newMandStatus}\n\nجرب الأداة وقارن وضعك التقاعدي بنفسك من هنا:\nhttps://nourenzi.github.io/pension/`;
+            let waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+            document.getElementById("whatsapp-share-btn").href = waUrl;
+            document.getElementById("floating-wa-btn").href = waUrl;
+        }
+
+        // --- برمجة زر تثبيت التطبيق (PWA) الذكي ---
+        let deferredPrompt;
+        const installAppBtn = document.getElementById('installAppBtn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault(); 
+            deferredPrompt = e; 
+        });
+
+        installAppBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt(); 
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('تم تثبيت التطبيق بنجاح');
+                }
+                deferredPrompt = null;
+            } else {
+                alert("📥 لتنزيل التطبيق على هاتفك بسرعة:\n\n🍎 لأجهزة آيفون (Safari): اضغط على زر 'المشاركة' في أسفل الشاشة، ثم اختر 'إضافة إلى الشاشة الرئيسية' (Add to Home Screen).\n\n🤖 لأجهزة أندرويد (Chrome): اضغط على النقاط الثلاث في أعلى المتصفح، ثم اختر 'تثبيت التطبيق' (Install App).");
             }
         });
-    });
 
-    // [دالة تحديث الرابط الحقيقي لتجنب الشاشة البيضاء المزعجة]
-    function updateWhatsAppLink() {
-        let resAge = document.getElementById("resAge").innerText;
-        let resCont = document.getElementById("resCont").innerText;
-        
-        let oldEarlyBoxHTML = document.getElementById("oldEarlyBox").innerHTML;
-        let oldMandBoxHTML = document.getElementById("oldMandatoryBox").innerHTML;
-        let newEarlyBoxHTML = document.getElementById("newEarlyBox").innerHTML;
-        let newMandBoxHTML = document.getElementById("newMandatoryBox").innerHTML;
-
-        let oldEarlyStatus = (oldEarlyBoxHTML.includes("مستوفى الشروط") && !oldEarlyBoxHTML.includes("غير مستوفى")) ? "✅ أستوفي الشروط" : "❌ لا أستوفي الشروط";
-        let oldMandStatus = (oldMandBoxHTML.includes("مستوفى الشروط") && !oldMandBoxHTML.includes("غير مستوفى")) ? "✅ أستوفي الشروط" : "❌ لا أستوفي الشروط";
-        
-        let newEarlyStatus = (newEarlyBoxHTML.includes("مستوفى الشروط") && !newEarlyBoxHTML.includes("غير مستوفى")) ? "✅ أستوفي الشروط" : "❌ لا أستوفي الشروط";
-        let newMandStatus = (newMandBoxHTML.includes("مستوفى الشروط") && !newMandBoxHTML.includes("غير مستوفى")) ? "✅ أستوفي الشروط" : "❌ لا أستوفي الشروط";
-
-        let msg = `مرحباً! استخدمت حاسبة التقاعد التجريبية للضمان الاجتماعي 🇯🇴.\n\n`;
-        msg += `تخطيطي للتقاعد على عمر (${resAge}) عاماً، بإجمالي اشتراكات (${resCont}) شهراً.\n\n`;
-        
-        msg += `⚖️ *حسب قانون 2014 الساري:*\n`;
-        msg += `▪️ التقاعد المبكر: ${oldEarlyStatus}\n`;
-        msg += `▪️ تقاعد الشيخوخة الوجوبي: ${oldMandStatus}\n\n`;
-        
-        msg += `⚖️ *حسب التعديلات المقترحة:*\n`;
-        msg += `▪️ التقاعد المبكر: ${newEarlyStatus}\n`;
-        msg += `▪️ تقاعد الشيخوخة الوجوبي: ${newMandStatus}\n\n`;
-
-        msg += `جرب الأداة وقارن وضعك التقاعدي بنفسك من هنا:\nhttps://nourenzi.github.io/pension/`;
-
-        // استخدام واجهة API الرسمية والآمنة للواتساب لتجنب النوافذ المنبثقة
-        let waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
-        
-        // تحديث مسار الرابط للزر المخفي 
-        document.getElementById("whatsapp-share-btn").href = waUrl;
-    }
-</script>
+        window.addEventListener('appinstalled', () => {
+            installAppBtn.style.display = 'none';
+            deferredPrompt = null;
+        });
+    </script>
+    
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js')
+            .then((registration) => console.log('تم تسجيل عامل الخدمة بنجاح:', registration.scope))
+            .catch((error) => console.log('فشل تسجيل عامل الخدمة:', error));
+        });
+      }
+    </script>
 </body>
-
 </html>
