@@ -7,6 +7,7 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-55PRQZF3');</script>
     <title>حاسبة التقاعد التجريبية - حاسبة الضمان الاجتماعي الأردني</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <meta name="description" content="استخدم حاسبة التقاعد والضمان الاجتماعي المجانية لمعرفة شروط التقاعد المبكر وتقاعد الشيخوخة. قم بحساب راتب التقاعد للقطاع الخاص، ومقارنة وضعك بين قانون الضمان الساري لعام 2014 ومسودة التعديلات المقترحة، وحساب تعويض الدفعة الواحدة.">
     <meta name="keywords" content="حاسبة التقاعد, حاسبة الضمان الاجتماعي, حاسبة الضمان الاجتماعي الأردني, التقاعد المبكر, تقاعد الشيخوخة, حساب راتب التقاعد للقطاع الخاص, قانون التقاعد الجديد للقطاع الخاص, مثال على احتساب راتب التقاعد الشيخوخة, تعديلات الضمان الاجتماعي, قانون الضمان الأردني, تعويض الدفعة الواحدة, حسبة التقاعد, مسودة الضمان">
     <meta name="author" content="Nour Eddin Alsawalmeh">
@@ -87,7 +88,8 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* تطبيق خط Cairo هنا */
+            font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
             background-color: var(--bg-main);
             color: var(--text-main); 
             margin: 0; padding: 20px;
@@ -120,7 +122,7 @@
 
         .optional-note { font-size: 12px; color: var(--text-muted); display: block; margin-top: 6px; font-weight: normal; transition: color 0.4s ease; }
 
-        .calc-btn { width: 100%; padding: 15px; background-color: var(--btn-bg); color: white; border: none; border-radius: 5px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: background-color 0.3s ease; }
+        .calc-btn { width: 100%; padding: 15px; background-color: var(--btn-bg); color: white; border: none; border-radius: 5px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: background-color 0.3s ease, transform 0.1s ease; }
         .calc-btn:hover { background-color: var(--btn-hover); }
         .print-btn { background-color: #2c3e50; margin-top: 20px; width: 100%; padding: 15px; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease; }
         .print-btn:hover { background-color: #34495e; }
@@ -190,6 +192,8 @@
         }
 
         .floating-btn:hover { transform: scale(1.1); }
+        
+        /* السطر السحري لمنع الأيقونات من إعاقة تتبع GTM */
         .floating-btn i { pointer-events: none; }
 
         /* زر الوضع الليلي العائم */
@@ -219,6 +223,22 @@
             .social-links { display: none !important; }
             .result-section { display: block !important; }
             .law-column, .lump-sum-box { page-break-inside: avoid; border: 1px solid #ccc; background-color: #fff !important; color: #000 !important;}
+        }
+
+        /* =========================================
+           تحديثات الجودة (SQA Fixes) - v3.4.0 UI
+           ========================================= */
+
+        /* تحسين توهج حقول الإدخال لتجربة مستخدم أفضل (Focus Ring) */
+        input[type="number"]:focus, select:focus { 
+            border-color: #3498db; 
+            outline: none; 
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); 
+        }
+
+        /* حركة تفاعلية لزر الحساب عند النقر */
+        .calc-btn:active {
+            transform: scale(0.98);
         }
     </style>
 </head>
@@ -332,7 +352,7 @@
 
     <div class="copyright-footer">
         <p>&copy; 2026 جميع الحقوق محفوظة - تم التطوير والبرمجة بواسطة نورالدين السوالمه</p>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px; direction: ltr;">Version: <span style="font-weight: bold;">v3.4.0</span></p>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px; direction: ltr;">Version: <span style="font-weight: bold;">v3.4.1</span></p>
         <div class="social-links">
             <a href="https://www.linkedin.com/in/nour-eddin-alsawalmeh-91801255/" target="_blank" title="تواصل معي على لينكد إن"><i class="fa-brands fa-linkedin"></i></a>
             <a href="https://github.com/NourEnzi" target="_blank" title="حسابي ومشاريعي على جيت هب"><i class="fa-brands fa-github"></i></a>
