@@ -1,5 +1,5 @@
 // تحديد اسم لنسخة الذاكرة المؤقتة (هذا هو السر: قم بتغيير الرقم v2 إلى v3 مستقبلاً عند أي تحديث)
-const CACHE_NAME = 'national-calculator-v3.4.0';
+const CACHE_NAME = 'national-calculator-v3.4.1';
 
 // قائمة الملفات التي نريد حفظها في ذاكرة هاتف المستخدم لتعمل بدون إنترنت
 const ASSETS_TO_CACHE = [
