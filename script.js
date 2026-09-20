@@ -1,3 +1,6 @@
+// متغير عالمي لحفظ نسخة المخطط البياني لتحديثه بدلاً من تكرار رسمه
+window.myDoughnutChart = null;
+
 /* ==========================================================================
    القسم الأول: التهيئة وربط أحداث الواجهة (Initialization & Event Listeners)
    ========================================================================== */
@@ -35,22 +38,18 @@ function populateDateDropdowns() {
 }
 
 function bindEvents() {
-    // أزرار الحساب والطباعة
     document.getElementById("calculate-btn").addEventListener("click", handleCalculateClick);
     document.getElementById("print-btn").addEventListener("click", () => window.print());
     document.getElementById("toggleDetailsBtn").addEventListener("click", togglePensionDetails);
     
-    // الأحداث الخاصة بحساب الأشهر التلقائي
     const autoCalcFields = ["birthMonth", "birthYear", "appointmentMonth", "appointmentYear", "targetInput"];
     autoCalcFields.forEach(id => {
         const el = document.getElementById(id);
         if(el) el.addEventListener(el.tagName === "INPUT" ? "input" : "change", calculateExpectedContributions);
     });
 
-    // أحداث الوضع الليلي
     document.getElementById("darkModeToggle").addEventListener("click", toggleDarkMode);
 
-    // أحداث القائمة المنسدلة للأسئلة الشائعة
     document.querySelectorAll(".accordion-btn").forEach(acc => {
         acc.addEventListener("click", function() {
             this.classList.toggle("active");
@@ -59,19 +58,27 @@ function bindEvents() {
         });
     });
 
-    // أحداث التثبيت (PWA)
     setupInstallPrompt();
 }
 
 function toggleDarkMode() {
     document.body.classList.toggle("dark-mode");
     let icon = document.getElementById("darkModeToggle").querySelector("i");
-    if(document.body.classList.contains("dark-mode")) {
+    const isDark = document.body.classList.contains("dark-mode");
+    
+    if(isDark) {
         icon.classList.replace("fa-moon", "fa-sun");
         icon.style.color = "#f1c40f"; 
     } else {
         icon.classList.replace("fa-sun", "fa-moon");
         icon.style.color = ""; 
+    }
+
+    // تحديث ألوان الرسم البياني فوراً عند تغيير الوضع
+    if (window.myDoughnutChart) {
+        window.myDoughnutChart.options.plugins.legend.labels.color = isDark ? '#48c9b0' : '#117864';
+        window.myDoughnutChart.data.datasets[0].borderColor = isDark ? '#0b2e27' : '#e8f8f5';
+        window.myDoughnutChart.update();
     }
 }
 
@@ -148,7 +155,6 @@ function calculateExpectedContributions() {
 function processRulesAndMath(validInputs) {
     const { gender, currentAge, currentRefYear, cont, salary, isHazardous } = validInputs;
     
-    // 1. قواعد قانون 2014
     const oldRules = {
         earlyGenCont: gender === "male" ? 252 : 228,
         earlySpecCont: gender === "male" ? 300 : 264,
@@ -157,7 +163,6 @@ function processRulesAndMath(validInputs) {
         earlyHazardAge: 45
     };
 
-    // 2. قواعد مسودة 2026
     let newRules = { ...oldRules, earlyHazardAge: 50, earlyHazardCont: 300 };
     
     if(currentRefYear >= 2030) {
@@ -174,7 +179,6 @@ function processRulesAndMath(validInputs) {
         if(newRules.mandatoryAge > maxAge) newRules.mandatoryAge = maxAge;
     }
 
-    // 3. حساب الراتب التقاعدي
     let pensionData = null;
     if (salary > 0 && cont > 0) {
         const MAX_INSURABLE = 3733;
@@ -206,7 +210,6 @@ function processRulesAndMath(validInputs) {
         };
     }
 
-    // 4. حساب تعويض الدفعة الواحدة
     let lumpSumData = null;
     if (salary > 0 && cont > 0) {
         let lumpSumBase = salary * cont * 0.2175;
@@ -217,12 +220,11 @@ function processRulesAndMath(validInputs) {
         };
     }
 
-    // تجميع النتائج وإرسالها للواجهة
     return { validInputs, oldRules, newRules, pensionData, lumpSumData };
 }
 
 /* ==========================================================================
-   القسم الرابع: تحديث واجهة المستخدم (UI Rendering)
+   القسم الرابع: الرسم البياني وتحديث واجهة المستخدم (UI Rendering & Charts)
    ========================================================================== */
 
 function handleCalculateClick() {
@@ -243,6 +245,7 @@ function renderResultsUI(results) {
 
     renderEligibilityBoxes(currentAge, cont, oldRules, newRules, isHazardous);
     renderPensionBox(pensionData, isHazardous, cont, currentAge, newRules.mandatoryAge);
+    drawPensionChart(pensionData, isHazardous, currentAge, newRules.mandatoryAge);
     renderLumpSumBox(lumpSumData, salary, cont);
     
     document.getElementById("resultBox").style.display = "block";
@@ -275,7 +278,6 @@ function renderEligibilityBoxes(currentAge, cont, oldRules, newRules, isHazardou
         newEarlyBox.innerHTML = generateOutputHTML("التقاعد المبكر", metNewGen, 50, newRules.earlyGenCont, metNewGen);
     }
     
-    // الشخيوخة الوجوبي
     const oldMandBox = document.getElementById("oldMandatoryBox");
     oldMandBox.className = (currentAge >= oldRules.mandatoryAge && cont >= oldRules.mandatoryCont) ? "status-box success" : "status-box fail";
     oldMandBox.innerHTML = generateOutputHTML("تقاعد الشيخوخة الوجوبي", currentAge >= oldRules.mandatoryAge && cont >= oldRules.mandatoryCont, oldRules.mandatoryAge, oldRules.mandatoryCont);
@@ -327,7 +329,6 @@ function renderPensionBox(pensionData, isHazardous, cont, currentAge, newMandato
     
     document.getElementById("detFinal").innerText = pensionData.finalPension.toFixed(2);
     
-    // Reset toggle
     document.getElementById("pensionDetailsExpanded").style.display = "none";
     document.getElementById("toggleDetailsBtn").innerText = "عرض تفاصيل الحسبة";
 
@@ -336,6 +337,76 @@ function renderPensionBox(pensionData, isHazardous, cont, currentAge, newMandato
     document.getElementById("pensionDetails").innerText = detailText;
     
     box.style.display = "block";
+}
+
+// دالة رسم المخطط الدائري التفاعلي
+function drawPensionChart(pensionData, isHazardous, currentAge, newMandatoryAge) {
+    const chartContainer = document.getElementById('chartContainer');
+    if (!pensionData) {
+        chartContainer.style.display = 'none';
+        return;
+    }
+    
+    chartContainer.style.display = 'block';
+    const ctx = document.getElementById('pensionChart').getContext('2d');
+
+    if (window.myDoughnutChart) {
+        window.myDoughnutChart.destroy();
+    }
+
+    let labels = [];
+    let data = [];
+    let bgColors = [];
+
+    // المنطق: إذا كان هناك خصم مبكر، نعرض "الراتب الصافي" مقابل "الخصم المقتطع"
+    if (pensionData.earlyDiscountAmount > 0 && !isHazardous && currentAge < newMandatoryAge) {
+        labels = ['الراتب الصافي (بعد الخصم)', 'قيمة الخصم المقتطعة'];
+        data = [pensionData.finalPension, pensionData.earlyDiscountAmount];
+        bgColors = ['#27ae60', '#e74c3c']; // أخضر وأحمر
+    } else {
+        // إذا تقاعد وجوبي أو مهن خطرة (لا نعرض خصم هنا)، نظهر "الراتب الأساسي" و"زيادة التخصيص"
+        labels = ['الراتب الأساسي', 'زيادة التخصيص'];
+        data = [pensionData.basePension, pensionData.allocationIncrease];
+        bgColors = ['#27ae60', '#3498db']; // أخضر وأزرق
+    }
+
+    const isDark = document.body.classList.contains('dark-mode');
+
+    window.myDoughnutChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: bgColors,
+                borderWidth: 2,
+                borderColor: isDark ? '#0b2e27' : '#e8f8f5' // متطابق مع لون صندوق الراتب
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '60%', // تفريغ منتصف الدائرة
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: { family: "'Cairo', sans-serif", size: 14, weight: 'bold' },
+                        color: isDark ? '#48c9b0' : '#117864'
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return ' ' + context.label + ': ' + context.parsed.toFixed(2) + ' دينار';
+                        }
+                    },
+                    titleFont: { family: "'Cairo', sans-serif" },
+                    bodyFont: { family: "'Cairo', sans-serif", size: 14 }
+                }
+            }
+        }
+    });
 }
 
 function renderLumpSumBox(lumpSumData, salary, cont) {

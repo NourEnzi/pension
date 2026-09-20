@@ -124,6 +124,16 @@ body.dark-mode .pension-box h3 { color: #1abc9c; }
 body.dark-mode .pension-amount { color: #48c9b0; }
 .pension-details { font-size: 14px; color: var(--text-muted); margin-top: 15px; line-height: 1.5; transition: color 0.4s ease; }
 
+/* تنسيق حاوية الرسم البياني الجديدة */
+.chart-container {
+    position: relative;
+    height: 250px;
+    width: 100%;
+    max-width: 320px;
+    margin: 25px auto;
+    display: none;
+}
+
 .toggle-details-btn { background-color: #16a085; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-family: inherit; font-weight: bold; font-size: 14px; transition: background-color 0.3s; margin-bottom: 10px; }
 .toggle-details-btn:hover { background-color: #117864; }
 .details-expanded { margin-top: 15px; padding-top: 15px; border-top: 1px solid #1abc9c; display: none; }
@@ -177,4 +187,5 @@ body.dark-mode .dark-mode-float { background-color: #444; color: #f1c40f; }
     .law-column, .lump-sum-box, .pension-box { page-break-inside: avoid; border: 1px solid #ccc; background-color: #fff !important; color: #000 !important;}
     .details-expanded { display: block !important; }
     .toggle-details-btn { display: none !important; }
+    .chart-container { display: none !important; } /* إخفاء الرسم عند الطباعة لتوفير الحبر */
 }
