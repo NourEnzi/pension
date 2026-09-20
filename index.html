@@ -6,7 +6,7 @@
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-55PRQZF3');</script>
-    <title>حاسبة التقاعد التجريبية - حاسبة الضمان الاجتماعي الأردني</title>
+    <title>حاسبة التقاعد الأردنية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <meta name="description" content="استخدم حاسبة التقاعد والضمان الاجتماعي المجانية لمعرفة شروط التقاعد المبكر وتقاعد الشيخوخة. قم بحساب راتب التقاعد للقطاع الخاص، ومقارنة وضعك بين قانون الضمان الساري لعام 2014 ومسودة التعديلات المقترحة، وحساب تعويض الدفعة الواحدة.">
     <meta name="keywords" content="حاسبة التقاعد, حاسبة الضمان الاجتماعي, حاسبة الضمان الاجتماعي الأردني, التقاعد المبكر, تقاعد الشيخوخة, حساب راتب التقاعد للقطاع الخاص, قانون التقاعد الجديد للقطاع الخاص, مثال على احتساب راتب التقاعد الشيخوخة, تعديلات الضمان الاجتماعي, قانون الضمان الأردني, تعويض الدفعة الواحدة, حسبة التقاعد, مسودة الضمان">
@@ -17,7 +17,7 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0e8a43">
 
-    <meta property="og:title" content="حاسبة التقاعد التجريبية - الضمان الاجتماعي الأردني">
+    <meta property="og:title" content="حاسبة التقاعد الأردنية">
     <meta property="og:description" content="أداة سريعة ومجانية لمحاكاة شروط التقاعد ومقارنتها مع مسودة التعديلات المقترحة. جربها الآن.">
     <meta property="og:type" content="website">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-HYLW3T6M72"></script>
@@ -33,7 +33,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* المتغيرات الأساسية (الوضع النهاري) */
         :root { 
             --bg-main: #f4f7f6; 
             --calc-bg: #fff; 
@@ -60,7 +59,6 @@
             --lumpsum-text: #d35400;
         }
 
-        /* المتغيرات (الوضع الليلي) */
         body.dark-mode {
             --bg-main: #121212;
             --calc-bg: #1e1e1e;
@@ -88,7 +86,6 @@
         }
 
         body {
-            /* تطبيق خط Cairo هنا */
             font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
             background-color: var(--bg-main);
             color: var(--text-main); 
@@ -115,15 +112,21 @@
         label { display: block; margin-bottom: 8px; font-weight: bold; color: var(--title-color); font-size: 15px; transition: color 0.4s ease; }
         
         input[type="number"], select { width: 100%; padding: 12px; border: 1px solid var(--border-col); border-radius: 5px; box-sizing: border-box; font-size: 16px; font-family: inherit; background-color: var(--input-bg); color: var(--text-main); transition: all 0.3s ease; }
-        input[type="number"]:focus, select:focus { border-color: #3498db; outline: none; }
+        input[type="number"]:focus, select:focus { border-color: #3498db; outline: none; box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); }
         
         .date-selectors { display: flex; gap: 10px; }
         .date-selectors select { flex: 1; cursor: pointer; }
 
         .optional-note { font-size: 12px; color: var(--text-muted); display: block; margin-top: 6px; font-weight: normal; transition: color 0.4s ease; }
 
-        .calc-btn { width: 100%; padding: 15px; background-color: var(--btn-bg); color: white; border: none; border-radius: 5px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: background-color 0.3s ease, transform 0.1s ease; }
+        /* تصميم مربع الاختيار للمهن الخطرة */
+        .checkbox-container { display: flex; align-items: center; gap: 10px; margin-top: 10px; margin-bottom: 20px; padding: 12px; background-color: var(--info-header-bg); border-radius: 5px; border-right: 4px solid #e67e22; cursor: pointer; transition: background-color 0.3s ease; }
+        .checkbox-container input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; accent-color: #e67e22; }
+        .checkbox-container label { margin-bottom: 0; cursor: pointer; color: var(--title-color); font-size: 16px; }
+
+        .calc-btn { width: 100%; padding: 15px; background-color: var(--btn-bg); color: white; border: none; border-radius: 5px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 5px; transition: background-color 0.3s ease, transform 0.1s ease; }
         .calc-btn:hover { background-color: var(--btn-hover); }
+        .calc-btn:active { transform: scale(0.98); }
         .print-btn { background-color: #2c3e50; margin-top: 20px; width: 100%; padding: 15px; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease; }
         .print-btn:hover { background-color: #34495e; }
         
@@ -142,11 +145,29 @@
         .success { background-color: var(--success-bg); color: var(--success-text); border: 1px solid var(--success-border); }
         .fail { background-color: var(--fail-bg); color: var(--fail-text); border: 1px solid var(--fail-border); }
         .discount-note { display: block; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--success-border); font-size: 13px; color: var(--lumpsum-text); font-weight: bold; }
+        .hazard-note { display: block; margin-top: 12px; padding-top: 12px; border-top: 1px dashed #e67e22; font-size: 13px; color: #d35400; font-weight: bold; }
         
         .lump-sum-box { background-color: var(--lumpsum-bg); padding: 25px; border-radius: 8px; border: 1px solid var(--lumpsum-border); border-right: 5px solid var(--lumpsum-text); transition: all 0.4s ease; }
         .lump-sum-box h3 { margin-top: 0; color: var(--lumpsum-text); font-size: 18px; margin-bottom: 10px; transition: color 0.4s ease; }
         .lump-sum-amount { font-size: 26px; font-weight: bold; color: #e67e22; margin: 10px 0; }
         .lump-sum-details { font-size: 14px; color: var(--text-muted); margin-top: 10px; line-height: 1.5; transition: color 0.4s ease; }
+
+        .pension-box { background-color: #e8f8f5; padding: 25px; border-radius: 8px; border: 1px solid #1abc9c; border-right: 5px solid #16a085; margin-bottom: 25px; transition: all 0.4s ease; }
+        body.dark-mode .pension-box { background-color: #0b2e27; border-color: #1abc9c; border-right-color: #1abc9c; }
+        .pension-box h3 { margin-top: 0; color: #16a085; font-size: 18px; margin-bottom: 10px; transition: color 0.4s ease; }
+        body.dark-mode .pension-box h3 { color: #1abc9c; }
+        .pension-amount { font-size: 26px; font-weight: bold; color: #117864; margin: 10px 0; }
+        body.dark-mode .pension-amount { color: #48c9b0; }
+        .pension-details { font-size: 14px; color: var(--text-muted); margin-top: 15px; line-height: 1.5; transition: color 0.4s ease; }
+        
+        .toggle-details-btn { background-color: #16a085; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-family: inherit; font-weight: bold; font-size: 14px; transition: background-color 0.3s; margin-bottom: 10px; }
+        .toggle-details-btn:hover { background-color: #117864; }
+        .details-expanded { margin-top: 15px; padding-top: 15px; border-top: 1px solid #1abc9c; display: none; }
+        .details-list { list-style-type: none; padding: 0; margin: 0; line-height: 2; font-size: 15px; }
+        .details-list li { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #bdc3c7; padding-bottom: 5px; margin-bottom: 5px; }
+        .details-list li:last-child { border-bottom: none; font-weight: bold; font-size: 16px; margin-top: 10px; }
+        .details-list li span:last-child { direction: ltr; font-weight: bold; }
+        body.dark-mode .details-list li { border-bottom-color: #444; }
 
         .copyright-footer { margin-top: 30px; margin-bottom: 20px; text-align: center; font-size: 14px; color: var(--text-muted); font-weight: bold; width: 100%; max-width: 850px; display: flex; flex-direction: column; align-items: center; gap: 10px; transition: color 0.4s ease; }
         .copyright-footer p { margin: 0; }
@@ -164,48 +185,15 @@
         .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background-color: var(--calc-bg); }
         .accordion-content p { margin: 0; padding: 0 20px 20px 20px; color: var(--text-main); line-height: 1.7; font-size: 15px; }
 
-        /* --- القائمة العائمة الجديدة (العمود) --- */
-        .floating-action-menu {
-            position: fixed;
-            bottom: 25px;
-            left: 25px;
-            display: flex;
-            flex-direction: column; /* ترتيب من الأعلى للأسفل */
-            gap: 15px; /* المسافة بين الأزرار */
-            z-index: 1000;
-        }
-
-        .floating-btn {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 26px;
-            color: white;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
-            text-decoration: none;
-        }
-
+        .floating-action-menu { position: fixed; bottom: 25px; left: 25px; display: flex; flex-direction: column; gap: 15px; z-index: 1000; }
+        .floating-btn { width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 26px; color: white; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease; text-decoration: none; }
         .floating-btn:hover { transform: scale(1.1); }
-        
-        /* السطر السحري لمنع الأيقونات من إعاقة تتبع GTM */
         .floating-btn i { pointer-events: none; }
-
-        /* زر الوضع الليلي العائم */
         .dark-mode-float { background-color: #2c3e50; }
         .dark-mode-float:hover { background-color: #1a252f; }
         body.dark-mode .dark-mode-float { background-color: #444; color: #f1c40f; }
-
-        /* زر تنزيل التطبيق العائم */
         .install-float { background-color: #3498db; display: flex; }
         .install-float:hover { background-color: #2980b9; }
-
-        /* زر الواتساب العائم */
         .wa-float { background-color: #25d366; }
         .wa-float:hover { background-color: #128c7e; color: white; }
 
@@ -222,23 +210,9 @@
             .disclaimer-box, .form-row, .calc-btn, .print-btn, .share-wa-btn, .copyright-footer, .faq-accordion, .floating-action-menu { display: none !important; }
             .social-links { display: none !important; }
             .result-section { display: block !important; }
-            .law-column, .lump-sum-box { page-break-inside: avoid; border: 1px solid #ccc; background-color: #fff !important; color: #000 !important;}
-        }
-
-        /* =========================================
-           تحديثات الجودة (SQA Fixes) - v3.4.0 UI
-           ========================================= */
-
-        /* تحسين توهج حقول الإدخال لتجربة مستخدم أفضل (Focus Ring) */
-        input[type="number"]:focus, select:focus { 
-            border-color: #3498db; 
-            outline: none; 
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); 
-        }
-
-        /* حركة تفاعلية لزر الحساب عند النقر */
-        .calc-btn:active {
-            transform: scale(0.98);
+            .law-column, .lump-sum-box, .pension-box { page-break-inside: avoid; border: 1px solid #ccc; background-color: #fff !important; color: #000 !important;}
+            .details-expanded { display: block !important; }
+            .toggle-details-btn { display: none !important; }
         }
     </style>
 </head>
@@ -246,11 +220,11 @@
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-55PRQZF3" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     
     <main class="calculator-section">
-        <h2>حاسبة التقاعد التجريبية - الضمان الاجتماعي الأردني<br><span style="font-size: 16px; color: var(--text-muted); font-weight: normal;">(محاكاة لمسودة التعديلات المقترحة)</span></h2>
+        <h2>حاسبة التقاعد الأردنية<br><span style="font-size: 16px; color: var(--text-muted); font-weight: normal;">(محاكاة لمسودة التعديلات المقترحة)</span></h2>
         
         <div class="disclaimer-box">
             <i class="fa-solid fa-triangle-exclamation"></i>
-            <div><strong>تنويه هام:</strong> هذه الأداة هي نموذج "تجريبي واسترشادي" فقط، تم برمجتها بناءً على مسودة التعديلات الحديثة المقترحة لقانون الضمان الاجتماعي. النتائج الصادرة عنها هي لغايات التقييم الأولي ولا تعتبر سنداً قانونياً أو قراراً رسمياً، حيث أن التعديلات لم تقر بشكل نهائي بعد.</div>
+            <div><strong>تنويه هام:</strong> هذه الأداة هي نموذج "تجريبي واسترشادي" فقط، تم برمجتها بناءً على مسودة التعديلات الحديثة المقترحة لقانون الضمان الاجتماعي وسقوف عام 2026. النتائج الصادرة عنها هي لغايات التقييم الأولي ولا تعتبر سنداً قانونياً.</div>
         </div>
 
         <div class="form-row">
@@ -293,6 +267,12 @@
             </div>
         </div>
         
+        <!-- إضافة صندوق اختيار المهن الخطرة -->
+        <label class="checkbox-container">
+            <input type="checkbox" id="isHazardous">
+            أعمل في مهنة من المهن الخطرة المعتمدة
+        </label>
+        
         <button id="calculate-btn" class="calc-btn" onclick="calculateAll()">استخراج التقرير الشامل</button>
 
         <div class="result-section" id="resultBox">
@@ -312,6 +292,29 @@
                     <div id="newEarlyBox" class="status-box"></div>
                     <div id="newMandatoryBox" class="status-box"></div>
                 </div>
+            </div>
+
+            <div class="pension-box" id="pensionCalcBox" style="display:none;">
+                <h3>الراتب التقاعدي المتوقع (حسب مسودة 2026)</h3>
+                <p>بناءً على راتبك الخاضع للضمان واشتراكاتك، الراتب الصافي المقدر هو:</p>
+                
+                <div class="pension-amount" id="pensionResult">0 دينار أردني</div>
+                
+                <button id="toggleDetailsBtn" class="toggle-details-btn" onclick="togglePensionDetails()">عرض تفاصيل الحسبة</button>
+                
+                <div id="pensionDetailsExpanded" class="details-expanded">
+                    <ul class="details-list">
+                        <li><span>الراتب الأساسي (بمعاملات 2.5% و 2%):</span> <span><span id="detBasic" dir="ltr">0</span> دينار</span></li>
+                        <li><span>زيادة التخصيص القانونية (+40 أو +20):</span> <span><span id="detIncrease" dir="ltr">0</span> دينار</span></li>
+                        <li id="detDiscountRow" style="color: #c0392b; display: none;"><span>خصم التقاعد المبكر (<span id="detDiscountRate">0</span>%):</span> <span><span id="detDiscount" dir="ltr">0</span> دينار</span></li>
+                        <li id="hazardDetNoteRow" style="color: #d35400; display: none; font-size: 13px; text-align: justify;">
+                            ⚠️ تنبيه: المهن الخطرة لها جداول خصم خاصة، ولم يتم خصم أي نسبة من الراتب المعروض أعلاه.
+                        </li>
+                        <li style="color: #117864;"><span>الراتب الصافي النهائي:</span> <span><span id="detFinal" dir="ltr">0</span> دينار</span></li>
+                    </ul>
+                </div>
+
+                <p class="pension-details" id="pensionDetails"></p>
             </div>
             
             <div class="lump-sum-box">
@@ -334,7 +337,7 @@
         </div>
         <div class="accordion-item">
             <button class="accordion-btn">ما هي شروط التقاعد المبكر للذكور والإناث؟ <i class="fa-solid fa-chevron-down accordion-icon"></i></button>
-            <div class="accordion-content"><p>تختلف الشروط حسب القانون وطبيعة العمل:<br><strong>في القانون الحالي (2014):</strong> للتقاعد المبكر العام، يُشترط بلوغ سن 50 عاماً مع 252 اشتراكاً للذكور، و228 للإناث. أما للمهن الخطرة (المبكر الخاص)، فيُشترط بلوغ 45 عاماً مع 300 اشتراك للذكور، و264 للإناث.<br><strong>في المسودة المقترحة:</strong> إذا كان تقاعدك المستهدف بعد عام 2030، ستبدأ هذه الاشتراكات بالارتفاع التدريجي المذكور سابقاً، وهو ما تحسبه هذه الأداة لك بدقة.</p></div>
+            <div class="accordion-content"><p>تختلف الشروط حسب القانون وطبيعة العمل:<br><strong>في القانون الحالي (2014):</strong> للتقاعد المبكر العام، يُشترط بلوغ سن 50 عاماً مع 252 اشتراكاً للذكور، و228 للإناث. أما للمهن الخطرة (المبكر الخاص)، فيُشترط بلوغ 45 عاماً مع 300 اشتراك للذكور، و264 للإناث.<br><strong>في المسودة المقترحة:</strong> تم إلغاء سن 45 للمهن الخطرة، وأصبح سن المبكر 50 عاماً باشتراط 300 اشتراك (منها 120 اشتراك خطر). أما الأعمال العادية فترتفع اشتراكاتها تدريجياً كما تم حسابه في الأداة.</p></div>
         </div>
         <div class="accordion-item">
             <button class="accordion-btn">كيف تتأثر شروط تقاعد الشيخوخة الوجوبي؟ <i class="fa-solid fa-chevron-down accordion-icon"></i></button>
@@ -352,7 +355,7 @@
 
     <div class="copyright-footer">
         <p>&copy; 2026 جميع الحقوق محفوظة - تم التطوير والبرمجة بواسطة نورالدين السوالمه</p>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px; direction: ltr;">Version: <span style="font-weight: bold;">v3.4.1</span></p>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px; direction: ltr;">Version: <span style="font-weight: bold;">v3.4.2</span></p>
         <div class="social-links">
             <a href="https://www.linkedin.com/in/nour-eddin-alsawalmeh-91801255/" target="_blank" title="تواصل معي على لينكد إن"><i class="fa-brands fa-linkedin"></i></a>
             <a href="https://github.com/NourEnzi" target="_blank" title="حسابي ومشاريعي على جيت هب"><i class="fa-brands fa-github"></i></a>
@@ -447,12 +450,25 @@
         document.getElementById("appointmentYear").addEventListener("change",autoF);
         document.getElementById("targetInput").addEventListener("input",autoF);
 
+        function togglePensionDetails() {
+            let detailsDiv = document.getElementById("pensionDetailsExpanded");
+            let btn = document.getElementById("toggleDetailsBtn");
+            if (detailsDiv.style.display === "none" || detailsDiv.style.display === "") {
+                detailsDiv.style.display = "block";
+                btn.innerText = "إخفاء تفاصيل الحسبة";
+            } else {
+                detailsDiv.style.display = "none";
+                btn.innerText = "عرض تفاصيل الحسبة";
+            }
+        }
+
         function calculateAll(){
             let gender = document.getElementById("gender").value;
             let bYear = document.getElementById("birthYear").value;
             let tInput = parseInt(document.getElementById("targetInput").value);
             let cont = parseInt(document.getElementById("expectedCont").value);
             let salary = parseFloat(document.getElementById("avgSalary").value) || 0;
+            let isHazardous = document.getElementById("isHazardous").checked;
             
             if(!bYear || !tInput || isNaN(cont) || salary < 0) {
                 return void alert("عذراً، يرجى تعبئة الحقول الأساسية وتجنب القيم السالبة في الراتب.");
@@ -467,11 +483,13 @@
                 return void alert("بيانات غير قانونية أو غير منطقية: يرجى التحقق من التواريخ.");
             }
 
+            // ثوابت القانون الحالي (2014)
             let oldEarlyGenCont = (gender === "male") ? 252 : 228;
             let oldEarlySpecCont = (gender === "male") ? 300 : 264;
             let oldMandatoryCont = 180;
             let oldMandatoryAge = (gender === "male") ? 60 : 55;
             
+            // متغيرات المسودة الجديدة
             let newEarlyCont = oldEarlyGenCont;
             let newMandatoryCont = oldMandatoryCont;
             let newMandatoryAge = oldMandatoryAge;
@@ -488,6 +506,84 @@
                 if(newMandatoryAge > maxAge) newMandatoryAge = maxAge;
             }
             
+            // تعديل مسودة 2026 للمهن الخطرة (إذا تم تفعيل التشيك بوكس)
+            let newEarlyHazardousCont = 300; // مسودة 2026 توحد اشتراكات الخطر لـ 300
+            let newEarlyHazardousAge = 50; // مسودة 2026 ترفع سن المبكر للخطر إلى 50
+            
+            if (salary > 0 && cont > 0) {
+                let maxInsurable = 3733; 
+                let effectiveSalary = Math.min(salary, maxInsurable);
+                let yearsOfService = cont / 12;
+                let basePension = 0;
+
+                if (effectiveSalary <= 1500) {
+                    basePension = effectiveSalary * (yearsOfService * 0.025);
+                } else {
+                    let firstPart = 1500 * (yearsOfService * 0.025);
+                    let secondPart = (effectiveSalary - 1500) * (yearsOfService * 0.020);
+                    basePension = firstPart + secondPart;
+                }
+
+                let allocationIncrease = (basePension < 500) ? 40 : 20;
+                let pensionAfterIncrease = basePension + allocationIncrease;
+
+                let earlyDiscountRate = 0;
+                let earlyDiscountAmount = 0;
+                
+                // حساب خصم التقاعد المبكر
+                if (currentAge < newMandatoryAge) {
+                    if (isHazardous) {
+                        // إعفاء صوري للمهن الخطرة من الخصم العادي وإظهار رسالة
+                        earlyDiscountRate = 0;
+                    } else {
+                        let monthsEarly = (newMandatoryAge - currentAge) * 12;
+                        let discountSteps = Math.floor(monthsEarly / 6);
+                        earlyDiscountRate = discountSteps * 0.02; 
+                        
+                        if(earlyDiscountRate > 0) {
+                            earlyDiscountAmount = pensionAfterIncrease * earlyDiscountRate;
+                        }
+                    }
+                }
+
+                let finalPension = pensionAfterIncrease - earlyDiscountAmount;
+                finalPension = Math.max(finalPension, 200);
+
+                document.getElementById("pensionResult").innerText = finalPension.toFixed(2) + " دينار أردني شهرياً";
+                
+                document.getElementById("detBasic").innerText = basePension.toFixed(2);
+                document.getElementById("detIncrease").innerText = allocationIncrease.toFixed(2);
+                
+                if (earlyDiscountRate > 0 && !isHazardous) {
+                    document.getElementById("detDiscountRow").style.display = "flex";
+                    document.getElementById("hazardDetNoteRow").style.display = "none";
+                    document.getElementById("detDiscountRate").innerText = (earlyDiscountRate * 100).toFixed(0);
+                    document.getElementById("detDiscount").innerText = "-" + earlyDiscountAmount.toFixed(2);
+                } else if (isHazardous && currentAge < newMandatoryAge) {
+                    // إظهار ملاحظة الخصم الخاص للمهن الخطرة
+                    document.getElementById("detDiscountRow").style.display = "none";
+                    document.getElementById("hazardDetNoteRow").style.display = "block";
+                } else {
+                    document.getElementById("detDiscountRow").style.display = "none";
+                    document.getElementById("hazardDetNoteRow").style.display = "none";
+                }
+                
+                document.getElementById("detFinal").innerText = finalPension.toFixed(2);
+                
+                document.getElementById("pensionDetailsExpanded").style.display = "none";
+                document.getElementById("toggleDetailsBtn").innerText = "عرض تفاصيل الحسبة";
+
+                let detailText = "* تم تقدير الراتب بناءً على اشتراكات (" + cont + " شهراً)، مع دمج معاملات المنفعة الجديدة، زيادة التخصيص الثابتة، والحد الأدنى 200 دينار.";
+                if (salary > maxInsurable) {
+                    detailText += " (تنبيه: تم تخفيض الراتب المدخل إلى سقف الخضوع 3733 ديناراً).";
+                }
+                
+                document.getElementById("pensionDetails").innerText = detailText;
+                document.getElementById("pensionCalcBox").style.display = "block";
+            } else {
+                document.getElementById("pensionCalcBox").style.display = "none";
+            }
+
             let lumpSumBase = salary * cont * 0.2175;
             let multiplier = 1, incrementText = "";
             if (cont < 120) { multiplier = 1.1; incrementText = "10%"; } 
@@ -495,13 +591,15 @@
             else if (cont >= 216) { multiplier = 1.15; incrementText = "15%"; }
             let totalLumpSum = (lumpSumBase * multiplier).toFixed(2);
             
-            function generateOutputHTML(title, isMet, ageReq, contReq, hasDiscount = false) {
+            function generateOutputHTML(title, isMet, ageReq, contReq, hasDiscount = false, isHazardRule = false) {
                 let html = "";
                 if(isMet) {
                     html = "✅ <strong>" + title + ": مستوفى الشروط</strong><br>تم استيفاء شرط العمر (" + ageReq + ") ورصيد الاشتراكات (" + contReq + ").";
-                    if(hasDiscount) html += "<span class='discount-note'>⚠️ ملاحظة قانونية: يخضع راتب التقاعد المبكر لنسبة تخفيض (خصم) مقدارها 2% عن كل 6 أشهر تسبق سن التقاعد الوجوبي.</span>";
+                    if(isHazardRule) html += "<br><span class='hazard-note'>⚠️ تذكير: يُشترط أن يتضمن رصيدك 120 اشتراكاً فعلياً في المهن الخطرة.</span>";
+                    else if(hasDiscount) html += "<span class='discount-note'>⚠️ ملاحظة قانونية: يخضع راتب التقاعد المبكر لنسبة تخفيض (خصم) مقدارها 2% عن كل 6 أشهر تسبق سن التقاعد الوجوبي. (تم تطبيقها في صندوق الراتب أدناه)</span>";
                 } else {
                     html = "❌ <strong>" + title + ": غير مستوفى الشروط</strong><br>الحد الأدنى المطلوب: عمر " + ageReq + " واشتراكات " + contReq + ".";
+                    if(isHazardRule) html += "<br><span class='hazard-note'>⚠️ تذكير: يُشترط أن يتضمن رصيدك 120 اشتراكاً فعلياً في المهن الخطرة.</span>";
                 }
                 return html;
             }
@@ -511,28 +609,48 @@
             document.getElementById("resCont").innerText = cont;
             
             let oldEarlyHTML = "", oldEarlyClass = "";
-            let metGen = (currentAge >= 50 && cont >= oldEarlyGenCont);
-            let metSpec = (currentAge >= 45 && cont >= oldEarlySpecCont);
+            let newEarlyHTML = "", newEarlyClass = "";
 
-            if (metGen) {
-                oldEarlyClass = "status-box success";
-                oldEarlyHTML = "✅ <strong>التقاعد المبكر: مستوفى الشروط</strong><br>تم استيفاء شرط العمر (50) ورصيد الاشتراكات (" + oldEarlyGenCont + ").";
-            } else if (metSpec && !metGen) {
-                oldEarlyClass = "status-box success";
-                oldEarlyHTML = "✅ <strong>التقاعد المبكر: مستوفى الشروط</strong><br>تم استيفاء شرط العمر (45) ورصيد الاشتراكات (" + oldEarlySpecCont + ").<br><br>";
-                oldEarlyHTML += "ℹ️ <strong style='color:#2980b9;'>للتخطيط:</strong> للتقاعد على سن 50، تحتاج إلى " + oldEarlyGenCont + " اشتراكاً (رصيدك الحالي: " + cont + ").";
+            // --- بناء تقارير قانون 2014 ومسودة 2026 حسب خيار المهن الخطرة ---
+            if (isHazardous) {
+                // تقييم قانون 2014 للمهن الخطرة (عمر 45)
+                let metOldHazard = (currentAge >= 45 && cont >= oldEarlySpecCont);
+                if (metOldHazard) {
+                    oldEarlyClass = "status-box success";
+                    oldEarlyHTML = "✅ <strong>التقاعد المبكر (مهن خطرة): مستوفى الشروط</strong><br>وفقاً لقانون 2014 الساري، تم استيفاء شرط العمر (45) ورصيد الاشتراكات (" + oldEarlySpecCont + ").";
+                } else {
+                    oldEarlyClass = "status-box fail";
+                    oldEarlyHTML = "❌ <strong>التقاعد المبكر (مهن خطرة): غير مستوفى الشروط</strong><br>الحد الأدنى المطلوب: عمر 45 واشتراكات " + oldEarlySpecCont + " وفقاً لقانون 2014 الساري.";
+                }
+
+                // تقييم مسودة 2026 للمهن الخطرة (عمر 50، 300 اشتراك)
+                let metNewHazard = (currentAge >= newEarlyHazardousAge && cont >= newEarlyHazardousCont);
+                newEarlyClass = metNewHazard ? "status-box success" : "status-box fail";
+                newEarlyHTML = generateOutputHTML("التقاعد المبكر (مهن خطرة)", metNewHazard, newEarlyHazardousAge, newEarlyHazardousCont, false, true);
+
             } else {
-                oldEarlyClass = "status-box fail";
-                oldEarlyHTML = "❌ <strong>التقاعد المبكر: غير مستوفى الشروط</strong><br>الحد الأدنى المطلوب أحد المسارين:<br>";
-                oldEarlyHTML += "<ul style='margin: 8px 0; padding-right: 20px;'><li>عمر 50 واشتراكات " + oldEarlyGenCont + ".</li><li>عمر 45 واشتراكات " + oldEarlySpecCont + ".</li></ul>";
+                // الوضع الطبيعي
+                let metGen = (currentAge >= 50 && cont >= oldEarlyGenCont);
+                if (metGen) {
+                    oldEarlyClass = "status-box success";
+                    oldEarlyHTML = "✅ <strong>التقاعد المبكر: مستوفى الشروط</strong><br>تم استيفاء شرط العمر (50) ورصيد الاشتراكات (" + oldEarlyGenCont + ").";
+                } else {
+                    oldEarlyClass = "status-box fail";
+                    oldEarlyHTML = "❌ <strong>التقاعد المبكر: غير مستوفى الشروط</strong><br>الحد الأدنى المطلوب: عمر 50 واشتراكات " + oldEarlyGenCont + ".";
+                }
+                
+                let metNewGen = (currentAge >= 50 && cont >= newEarlyCont);
+                newEarlyClass = metNewGen ? "status-box success" : "status-box fail";
+                newEarlyHTML = generateOutputHTML("التقاعد المبكر", metNewGen, 50, newEarlyCont, metNewGen);
             }
             
             document.getElementById("oldEarlyBox").className = oldEarlyClass;
             document.getElementById("oldEarlyBox").innerHTML = oldEarlyHTML;
             document.getElementById("oldMandatoryBox").className = "status-box " + (currentAge >= oldMandatoryAge && cont >= oldMandatoryCont ? "success" : "fail");
             document.getElementById("oldMandatoryBox").innerHTML = generateOutputHTML("تقاعد الشيخوخة الوجوبي", currentAge >= oldMandatoryAge && cont >= oldMandatoryCont, oldMandatoryAge, oldMandatoryCont);
-            document.getElementById("newEarlyBox").className = "status-box " + (currentAge >= 50 && cont >= newEarlyCont ? "success" : "fail");
-            document.getElementById("newEarlyBox").innerHTML = generateOutputHTML("التقاعد المبكر", currentAge >= 50 && cont >= newEarlyCont, 50, newEarlyCont, currentAge >= 50 && cont >= newEarlyCont);
+            
+            document.getElementById("newEarlyBox").className = newEarlyClass;
+            document.getElementById("newEarlyBox").innerHTML = newEarlyHTML;
             document.getElementById("newMandatoryBox").className = "status-box " + (currentAge >= newMandatoryAge && cont >= newMandatoryCont ? "success" : "fail");
             document.getElementById("newMandatoryBox").innerHTML = generateOutputHTML("تقاعد الشيخوخة الوجوبي", currentAge >= newMandatoryAge && cont >= newMandatoryCont, newMandatoryAge, newMandatoryCont);
             
@@ -577,7 +695,6 @@
             document.getElementById("floating-wa-btn").href = waUrl;
         }
 
-        // --- برمجة زر تثبيت التطبيق (PWA) الذكي ---
         let deferredPrompt;
         const installAppBtn = document.getElementById('installAppBtn');
 
