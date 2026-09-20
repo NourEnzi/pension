@@ -1,10 +1,12 @@
-// تحديد اسم لنسخة الذاكرة المؤقتة (تم التحديث إلى v3.4.2)
-const CACHE_NAME = 'national-calculator-v3.4.2';
+// تحديد اسم لنسخة الذاكرة المؤقتة (تم التحديث إلى v3.5.0)
+const CACHE_NAME = 'national-calculator-v3.5.0';
 
 // قائمة الملفات التي نريد حفظها في ذاكرة هاتف المستخدم لتعمل بدون إنترنت
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
+  './style.css',
+  './script.js',
   './manifest.json',
   './favicon.png'
 ];
