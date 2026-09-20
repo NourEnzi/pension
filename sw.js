@@ -23,7 +23,6 @@ self.addEventListener('install', (event) => {
       })
   );
 });
-
 // الحدث الثاني: التفعيل (Activate) - التنظيف الذكي للكاش القديم
 self.addEventListener('activate', (event) => {
   // السيطرة على جميع النوافذ المفتوحة للتطبيق فوراً
